@@ -86,64 +86,36 @@ export const Layout = (props) => {
             position: fixed;
             inset: 0;
             z-index: -2;
-            background:
-              radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.95) 0%, transparent 34%),
-              radial-gradient(ellipse 72% 50% at 16% 12%, rgba(10, 163, 235, 0.16) 0%, transparent 58%),
-              radial-gradient(ellipse 52% 42% at 92% 28%, rgba(147, 197, 253, 0.22) 0%, transparent 58%),
-              linear-gradient(180deg, #f8fbff 0%, #eef6ff 45%, #ffffff 100%);
+            background: #f5f5f7;
             pointer-events: none;
           }
 
           .dark body::before,
           html.dark body::before {
-            background:
-              radial-gradient(circle at 50% -10%, rgba(51, 197, 255, 0.18) 0%, transparent 34%),
-              radial-gradient(ellipse 72% 50% at 16% 12%, rgba(10, 163, 235, 0.14) 0%, transparent 58%),
-              radial-gradient(ellipse 52% 42% at 92% 28%, rgba(59, 130, 246, 0.16) 0%, transparent 58%),
-              linear-gradient(180deg, #070b13 0%, #0b1220 50%, #070b13 100%);
+            background: #171717;
           }
 
-          body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            opacity: 0.18;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 128px 128px;
-          }
-
-          .dark body::after,
-          html.dark body::after {
-            opacity: 0.15;
-          }
+          body::after { content: none; }
 
           .glass-panel {
-            border: 1px solid rgba(255, 255, 255, 0.72);
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.46));
-            box-shadow: 0 24px 70px -42px rgba(15, 23, 42, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.78);
-            backdrop-filter: blur(26px) saturate(150%);
-            -webkit-backdrop-filter: blur(26px) saturate(150%);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            background: #ffffff;
+            box-shadow: none;
           }
 
           .dark .glass-panel,
           html.dark .glass-panel {
-            border-color: rgba(255, 255, 255, 0.10);
-            background: linear-gradient(145deg, rgba(17, 24, 39, 0.66), rgba(15, 23, 42, 0.42));
-            box-shadow: 0 28px 80px -46px rgba(0, 0, 0, 0.86), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.12);
+            background: #303030;
           }
 
           .premium-card {
             transform: translateZ(0);
-            transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 260ms ease, border-color 260ms ease, background 260ms ease;
+            transition: border-color 180ms ease, background 180ms ease;
           }
 
           .premium-card:hover {
-            transform: translateY(-3px) scale(1.005);
-            border-color: rgba(10, 163, 235, 0.24);
-            box-shadow: 0 30px 90px -46px rgba(10, 163, 235, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.82);
+            border-color: rgba(255, 255, 255, 0.18);
           }
 
           .dark .premium-card:hover,

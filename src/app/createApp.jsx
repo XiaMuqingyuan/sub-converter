@@ -45,23 +45,15 @@ export function createApp(bindings = {}) {
         return c.html(
             <Layout title={t('pageTitle')} description={t('pageDescription')} keywords={t('pageKeywords')}>
                 <div class="relative flex min-h-screen flex-col overflow-hidden">
-                    <div class="hero-orb -top-28 -left-24"></div>
-                    <div class="hero-orb top-36 -right-28 hidden md:block"></div>
                     <Navbar />
                     <main class="relative z-10 flex-1">
-                        <div class="container mx-auto px-4 pb-12 pt-28 md:pt-32">
-                            <div class="mx-auto max-w-5xl">
-                                <div class="mx-auto mb-12 max-w-3xl text-center md:mb-14">
-                                    <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-primary-200/80 bg-white/70 px-4 py-2 text-sm font-semibold text-primary-700 shadow-sm backdrop-blur dark:border-primary-800/60 dark:bg-primary-950/30 dark:text-primary-300">
-                                        <i class="fas fa-wand-magic-sparkles text-primary-500"></i>
-                                        <span>Subscription Converter</span>
-                                    </div>
-                                    <h1 class="mb-5 bg-gradient-to-br from-gray-950 via-gray-800 to-primary-700 bg-clip-text text-5xl font-black tracking-tight text-transparent dark:from-white dark:via-gray-100 dark:to-primary-300 md:text-7xl">
-                                        {APP_NAME}
+                        <div class="container mx-auto px-4 pb-12 pt-24 md:pt-28">
+                            <div class="mx-auto max-w-[970px] overflow-hidden rounded-2xl bg-white shadow-2xl shadow-black/10 dark:bg-[#2b2b2b] dark:shadow-black/30">
+                                <div class="bg-gradient-to-r from-[#229bc6] to-[#08ad72] px-6 py-16 text-center md:py-20">
+                                    <h1 class="text-5xl font-light tracking-wide text-white md:text-6xl">
+                                        {t('navConvert') || APP_NAME}
                                     </h1>
-                                    <p class="mx-auto max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-300 md:text-xl">
-                                        {subtitle}
-                                    </p>
+                                    <p class="sr-only">{subtitle}</p>
                                 </div>
                                 <Form t={t} lang={lang} />
                             </div>

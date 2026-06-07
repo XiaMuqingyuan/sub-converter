@@ -46,11 +46,11 @@ export const Form = (props) => {
   `;
 
   return (
-    <div x-data="formData()" x-init="init()" class="fade-up mx-auto max-w-5xl">
-      <form {...{'x-on:submit.prevent': 'submitForm'}} class="space-y-6 md:space-y-7">
+    <div x-data="formData()" x-init="init()" class="px-10 py-10 md:px-12">
+      <form {...{'x-on:submit.prevent': 'submitForm'}} class="space-y-8">
 
       {/* Input Section */}
-      <div class="glass-panel premium-card group rounded-[2rem] p-5 md:p-7">
+      <div class="group rounded-xl border border-black/10 p-8 dark:border-white/10">
         <TextareaWithActions
           id="input"
           name="input"
@@ -72,7 +72,7 @@ export const Form = (props) => {
               label: t('paste'),
               hideLabelOnMobile: true,
               className:
-                'interactive-soft flex items-center gap-1 rounded-full bg-white/60 px-3 py-1.5 text-xs font-medium text-gray-600 shadow-sm hover:bg-primary-50 hover:text-primary-600 dark:bg-white/10 dark:text-gray-300 dark:hover:bg-primary-900/20 dark:hover:text-primary-400',
+                'flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-gray-500 hover:text-primary-500 dark:text-gray-400',
               title: t('paste'),
               attrs: {
                 'x-on:click': "navigator.clipboard.readText().then(text => input = text).catch(() => {})"
@@ -84,7 +84,7 @@ export const Form = (props) => {
               label: t('clear'),
               hideLabelOnMobile: true,
               className:
-                'interactive-soft flex items-center gap-1 rounded-full bg-white/60 px-3 py-1.5 text-xs font-medium text-gray-600 shadow-sm hover:bg-red-50 hover:text-red-600 dark:bg-white/10 dark:text-gray-300 dark:hover:bg-red-900/20 dark:hover:text-red-400',
+                'flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-gray-500 hover:text-red-500 dark:text-gray-400',
               title: t('clear'),
               attrs: {
                 'x-on:click': "input = ''",
@@ -97,7 +97,7 @@ export const Form = (props) => {
 
       {/* Advanced Options Toggle */}
       <div 
-        class="glass-panel premium-card flex cursor-pointer items-center justify-between rounded-[1.7rem] p-4" 
+        class="flex cursor-pointer items-center justify-between rounded-xl border border-black/10 p-4 dark:border-white/10" 
         x-on:click="showAdvanced = !showAdvanced"
         role="button"
         tabindex="0"
@@ -107,13 +107,13 @@ export const Form = (props) => {
         }}
       >
         <div class="flex items-center gap-3">
-          <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/70 text-primary-600 shadow-sm dark:bg-white/10 dark:text-primary-300">
+          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-500/10 text-primary-500">
             <i class="fas fa-sliders-h"></i>
           </div>
           <span class="font-semibold text-gray-900 dark:text-white">{t('advancedOptions')}</span>
         </div>
         <div 
-          class="flex h-8 w-8 items-center justify-center rounded-full bg-white/70 text-gray-500 shadow-sm transition-transform duration-300 dark:bg-white/10 dark:text-gray-300" 
+          class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition-transform duration-300 dark:text-gray-300" 
           x-bind:class="{'rotate-180': showAdvanced}"
         >
           <i class="fas fa-chevron-down"></i>
@@ -124,13 +124,13 @@ export const Form = (props) => {
   <div x-show="showAdvanced" {...{'x-transition:enter': 'transition ease-out duration-300', 'x-transition:enter-start': 'opacity-0 transform -translate-y-4', 'x-transition:enter-end': 'opacity-100 transform translate-y-0', 'x-transition:leave': 'transition ease-in duration-200', 'x-transition:leave-start': 'opacity-100 transform translate-y-0', 'x-transition:leave-end': 'opacity-0 transform -translate-y-4'}} class="space-y-6">
 
     {/* Rule Selection */ }
-    <div class="glass-panel premium-card rounded-[2rem] p-5 md:p-6">
+    <div class="rounded-xl border border-black/10 p-8 dark:border-white/10">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <i class="fas fa-filter text-gray-400"></i>
           {t('ruleSelection')}
         </h3>
-        <select x-model="selectedPredefinedRule" x-on:change="applyPredefinedRule()" class="rounded-full border border-white/70 bg-white/60 px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm outline-none backdrop-blur focus:ring-4 focus:ring-primary-500/10 dark:border-white/10 dark:bg-white/10 dark:text-gray-200">
+        <select x-model="selectedPredefinedRule" x-on:change="applyPredefinedRule()" class="rounded-lg border border-black/10 bg-gray-50 px-3 py-1.5 text-sm font-medium text-gray-700 outline-none dark:border-white/10 dark:bg-[#3b3b3b] dark:text-gray-200">
         <option value="custom">{t('custom')}</option>
         <option value="minimal">{t('minimal')}</option>
         <option value="balanced">{t('balanced')}</option>
@@ -140,7 +140,7 @@ export const Form = (props) => {
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
     {UNIFIED_RULES.map((rule) => (
-      <label class="interactive-soft group flex cursor-pointer items-center rounded-2xl border border-white/60 bg-white/42 p-3 hover:border-primary-200 hover:bg-white/75 dark:border-white/10 dark:bg-white/[0.06] dark:hover:border-primary-500/30 dark:hover:bg-white/10">
+      <label class="group flex cursor-pointer items-center rounded-lg border border-black/10 bg-gray-50 p-3 hover:border-primary-300 dark:border-white/10 dark:bg-[#3b3b3b]">
         <input
           type="checkbox"
           value={rule.name}
@@ -161,14 +161,14 @@ export const Form = (props) => {
   <CustomRules t={t} />
 
     {/* General Options */ }
-    <div class="glass-panel premium-card rounded-[2rem] p-5 md:p-6">
+    <div class="rounded-xl border border-black/10 p-8 dark:border-white/10">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <i class="fas fa-cog text-gray-400"></i>
               {t('generalSettings')}
             </h3>
             
             <div class="space-y-4">
-              <label class="interactive-soft flex cursor-pointer items-center justify-between rounded-2xl border border-white/60 bg-white/42 p-3 hover:border-primary-200 hover:bg-white/75 dark:border-white/10 dark:bg-white/[0.06] dark:hover:border-primary-500/30 dark:hover:bg-white/10">
+              <label class="flex cursor-pointer items-center justify-between rounded-lg border border-black/10 bg-gray-50 p-3 dark:border-white/10 dark:bg-[#3b3b3b]">
                 <span class="font-medium text-gray-700 dark:text-gray-300">{t('groupByCountry')}</span>
                 <div class="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" x-model="groupByCountry" class="sr-only peer" />
@@ -176,7 +176,7 @@ export const Form = (props) => {
                 </div>
               </label>
 
-              <label class="interactive-soft flex cursor-pointer items-center justify-between rounded-2xl border border-white/60 bg-white/42 p-3 hover:border-primary-200 hover:bg-white/75 dark:border-white/10 dark:bg-white/[0.06] dark:hover:border-primary-500/30 dark:hover:bg-white/10">
+              <label class="flex cursor-pointer items-center justify-between rounded-lg border border-black/10 bg-gray-50 p-3 dark:border-white/10 dark:bg-[#3b3b3b]">
                 <span class="font-medium text-gray-700 dark:text-gray-300">{t('includeAutoSelect')}</span>
                 <div class="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" x-model="includeAutoSelect" class="sr-only peer" />
@@ -184,7 +184,7 @@ export const Form = (props) => {
                 </div>
               </label>
 
-              <label class="interactive-soft flex cursor-pointer items-center justify-between rounded-2xl border border-white/60 bg-white/42 p-3 hover:border-primary-200 hover:bg-white/75 dark:border-white/10 dark:bg-white/[0.06] dark:hover:border-primary-500/30 dark:hover:bg-white/10">
+              <label class="flex cursor-pointer items-center justify-between rounded-lg border border-black/10 bg-gray-50 p-3 dark:border-white/10 dark:bg-[#3b3b3b]">
                 <span class="font-medium text-gray-700 dark:text-gray-300">{t('enableClashUI')}</span>
                 <div class="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" x-model="enableClashUI" class="sr-only peer" />
@@ -206,32 +206,32 @@ export const Form = (props) => {
               >
                 <div>
                   <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('externalController')}</label>
-                  <input type="text" x-model="externalController" class="w-full rounded-2xl border border-white/60 bg-white/55 px-4 py-2 text-gray-900 outline-none backdrop-blur focus:ring-4 focus:ring-primary-500/10 dark:border-white/10 dark:bg-white/10 dark:text-white" placeholder={t('externalControllerPlaceholder')} />
+                  <input type="text" x-model="externalController" class="w-full rounded-lg border border-black/10 bg-gray-50 px-4 py-2 text-gray-900 outline-none focus:border-primary-400 dark:border-white/10 dark:bg-[#3b3b3b] dark:text-white" placeholder={t('externalControllerPlaceholder')} />
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('externalUiDownloadUrl')}</label>
-                  <input type="text" x-model="externalUiDownloadUrl" class="w-full rounded-2xl border border-white/60 bg-white/55 px-4 py-2 text-gray-900 outline-none backdrop-blur focus:ring-4 focus:ring-primary-500/10 dark:border-white/10 dark:bg-white/10 dark:text-white" placeholder={t('externalUiDownloadUrlPlaceholder')} />
+                  <input type="text" x-model="externalUiDownloadUrl" class="w-full rounded-lg border border-black/10 bg-gray-50 px-4 py-2 text-gray-900 outline-none focus:border-primary-400 dark:border-white/10 dark:bg-[#3b3b3b] dark:text-white" placeholder={t('externalUiDownloadUrlPlaceholder')} />
                 </div>
               </div>
           </div>
           </div>
 
   {/* Subconverter External Config */}
-  <div class="glass-panel premium-card rounded-[2rem] p-5 md:p-6">
+  <div class="rounded-xl border border-black/10 p-8 dark:border-white/10">
     <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-2">
       <i class="fas fa-file-export text-gray-400"></i>
       {t('subconverterConfigTitle')}
     </h3>
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('subconverterConfigDesc')}</p>
-    <div class="rounded-2xl border border-white/60 bg-white/42 px-4 py-3 shadow-inner shadow-white/70 dark:border-white/10 dark:bg-black/20 dark:shadow-black/20">
+    <div class="rounded-lg border border-black/10 bg-gray-50 px-4 py-3 dark:border-white/10 dark:bg-[#3b3b3b]">
       <p class="font-mono text-sm text-gray-600 dark:text-gray-400 break-all" x-text="getSubconverterUrl()"></p>
     </div>
     <div class="mt-3 flex justify-end">
       <button
         type="button"
         x-on:click="copySubconverterUrl()"
-        class="interactive-soft flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium"
-        x-bind:class="subconverterCopied ? 'bg-green-100/80 dark:bg-green-900/30 text-green-600 dark:text-green-400' : 'bg-white/60 dark:bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-white/90 dark:hover:bg-white/15'"
+        class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium"
+        x-bind:class="subconverterCopied ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' : 'bg-gray-100 dark:bg-[#3b3b3b] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10'"
       >
         <i class="fas" x-bind:class="subconverterCopied ? 'fa-check' : 'fa-copy'"></i>
         <span x-text={`subconverterCopied ? '${t('copiedSubconverterUrl')}' : '${t('copySubconverterUrl')}'`}></span>
@@ -240,13 +240,13 @@ export const Form = (props) => {
   </div>
 
   {/* Base Config */ }
-  <div class="glass-panel premium-card rounded-[2rem] p-5 md:p-6">
+  <div class="rounded-xl border border-black/10 p-8 dark:border-white/10">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <i class="fas fa-file-code text-gray-400"></i>
                 {t('baseConfigSettings')}
               </h3>
-              <select x-model="configType" class="rounded-full border border-white/70 bg-white/60 px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm outline-none backdrop-blur focus:ring-4 focus:ring-primary-500/10 dark:border-white/10 dark:bg-white/10 dark:text-gray-200">
+              <select x-model="configType" class="rounded-lg border border-black/10 bg-gray-50 px-3 py-1.5 text-sm font-medium text-gray-700 outline-none dark:border-white/10 dark:bg-[#3b3b3b] dark:text-gray-200">
                 <option value="singbox">SingBox (JSON)</option>
                 <option value="clash">Clash (YAML)</option>
                 <option value="surge">Surge (JSON/INI)</option>
@@ -270,7 +270,7 @@ export const Form = (props) => {
                   key: 'validate-config',
                   label: t('validateConfig'),
                   className:
-                     'interactive-soft flex items-center gap-2 rounded-full bg-white/60 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-white/90 dark:bg-white/10 dark:text-gray-300 dark:hover:bg-white/15',
+                     'flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-200 dark:bg-[#3b3b3b] dark:text-gray-300 dark:hover:bg-white/10',
                   attrs: {
                     'x-on:click': 'validateBaseConfig()'
                   }
@@ -293,19 +293,19 @@ export const Form = (props) => {
                 type="button" 
                 x-on:click="saveBaseConfig()" 
                 x-bind:disabled="savingConfig"
-                class="interactive-soft flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-white/10 dark:text-gray-300 dark:hover:bg-white/15"
+                class="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-[#3b3b3b] dark:text-gray-300 dark:hover:bg-white/10"
               >
                 <i class="fas" x-bind:class="savingConfig ? 'fa-spinner fa-spin' : 'fa-save'"></i>
                 <span x-text="savingConfig ? savingConfigText : saveConfigText">{t('saveConfig')}</span>
               </button>
-              <button type="button" x-on:click="clearBaseConfig()" class="interactive-soft rounded-full bg-red-50/80 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40" >
+              <button type="button" x-on:click="clearBaseConfig()" class="rounded-lg bg-red-50 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40" >
   { t('clearConfig') }
               </button>
           </div>
           </div >
 
   {/* User Agent */ }
-  <div class="glass-panel premium-card rounded-[2rem] p-5 md:p-6">
+  <div class="rounded-xl border border-black/10 p-8 dark:border-white/10">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <i class="fas fa-user-secret text-gray-400"></i>
               {t('UASettings')}
@@ -313,7 +313,7 @@ export const Form = (props) => {
             <input 
               type="text" 
               x-model="customUA" 
-              class="w-full rounded-2xl border border-white/60 bg-white/55 px-4 py-2 text-gray-900 outline-none backdrop-blur focus:ring-4 focus:ring-primary-500/10 dark:border-white/10 dark:bg-white/10 dark:text-white" 
+              class="w-full rounded-lg border border-black/10 bg-gray-50 px-4 py-2 text-gray-900 outline-none focus:border-primary-400 dark:border-white/10 dark:bg-[#3b3b3b] dark:text-white" 
               placeholder="curl/7.74.0" 
             />
           </div>
@@ -323,7 +323,7 @@ export const Form = (props) => {
   <div class="flex flex-col sm:flex-row gap-4">
           <button 
             type="submit" 
-            class="interactive-soft flex flex-1 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary-600 to-primary-400 px-6 py-4 font-bold text-white shadow-glow shadow-primary-500/30 hover:from-primary-700 hover:to-primary-500 hover:shadow-primary-500/40 disabled:cursor-not-allowed disabled:opacity-70"
+            class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#229bc6] to-[#08ad72] px-6 py-4 font-bold text-white hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
             x-bind:disabled="loading"
           >
             <i class="fas fa-sync-alt" x-bind:class="loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'"></i>
@@ -333,7 +333,7 @@ export const Form = (props) => {
   <button
     type="button" 
             x-on:click="clearAll()"
-class="interactive-soft flex items-center justify-center gap-2 rounded-full border border-white/70 bg-white/55 px-6 py-4 font-semibold text-gray-700 shadow-sm hover:bg-white/85 dark:border-white/10 dark:bg-white/10 dark:text-gray-300 dark:hover:bg-white/15"
+class="flex items-center justify-center gap-2 rounded-lg border border-black/10 px-6 py-4 font-semibold text-gray-700 hover:bg-gray-100 dark:border-white/15 dark:text-gray-300 dark:hover:bg-white/10"
   >
   <i class="fas fa-trash-alt"></i>
 { t('clear') }
@@ -343,7 +343,7 @@ class="interactive-soft flex items-center justify-center gap-2 rounded-full bord
 
   {/* Results Section */ }
   <div x-cloak x-show="generatedLinks" x-data="{ copied: null }" {...{'x-transition:enter': 'transition ease-out duration-500', 'x-transition:enter-start': 'opacity-0 transform translate-y-8', 'x-transition:enter-end': 'opacity-100 transform translate-y-0'}} class="mt-12">
-    <div class="glass-panel premium-card mb-8 rounded-[2rem] p-5 md:p-7">
+    <div class="mb-8 rounded-xl border border-black/10 p-8 dark:border-white/10">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <span class="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 flex items-center justify-center">
@@ -364,13 +364,13 @@ class="interactive-soft flex items-center justify-center gap-2 rounded-full bord
                 type="text"
                 readonly
                 x-bind:value={`shortenedLinks ? shortenedLinks?.${field.key} : generatedLinks?.${field.key}`}
-                class="w-full rounded-2xl border border-white/60 bg-white/50 px-4 py-2 font-mono text-sm outline-none transition-all duration-200 focus:ring-4 focus:ring-primary-500/10 dark:border-white/10 dark:bg-black/20"
+                class="w-full rounded-lg border border-black/10 bg-gray-50 px-4 py-2 font-mono text-sm outline-none transition-colors duration-200 focus:border-primary-400 dark:border-white/10 dark:bg-[#3b3b3b]"
                 x-bind:class="shortenedLinks ? 'text-primary-600 dark:text-primary-400 font-semibold focus:ring-primary-500' : 'text-gray-600 dark:text-gray-400 focus:ring-green-500'"
               />
               <button
                 type="button"
                 x-on:click={`navigator.clipboard.writeText((shortenedLinks || generatedLinks)?.${field.key}); copied = '${field.key}'; setTimeout(() => copied = null, 2000)`}
-                class="interactive-soft flex items-center justify-center gap-2 rounded-full bg-white/60 px-4 py-2 text-gray-600 dark:bg-white/10 dark:text-gray-300"
+                class="flex items-center justify-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-gray-600 dark:bg-[#3b3b3b] dark:text-gray-300"
                 x-bind:class={`{
                   'hover:bg-green-100 dark:hover:bg-green-900/30 hover:text-green-600 dark:hover:text-green-400': !shortenedLinks,
                   'hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400': shortenedLinks,
@@ -396,7 +396,7 @@ class="interactive-soft flex items-center justify-center gap-2 rounded-full bord
               type="text"
               x-model="customShortCode"
               placeholder={t('customShortCodePlaceholder')}
-              class="w-full rounded-2xl border border-white/60 bg-white/55 px-4 py-2 text-center text-gray-900 outline-none backdrop-blur transition-all duration-200 focus:ring-4 focus:ring-primary-500/10 dark:border-white/10 dark:bg-white/10 dark:text-white"
+              class="w-full rounded-lg border border-black/10 bg-gray-50 px-4 py-2 text-center text-gray-900 outline-none transition-colors duration-200 focus:border-primary-400 dark:border-white/10 dark:bg-[#3b3b3b] dark:text-white"
             />
           </div>
         </div>
@@ -405,7 +405,7 @@ class="interactive-soft flex items-center justify-center gap-2 rounded-full bord
             type="button"
             x-on:click="shortenedLinks ? shortenedLinks = null : shortenLinks()"
             x-bind:disabled="!shortenedLinks && shortening"
-            class="interactive-soft flex items-center gap-2 rounded-full px-6 py-3 font-semibold shadow-lg"
+            class="flex items-center gap-2 rounded-lg px-6 py-3 font-semibold"
             x-bind:class="shortenedLinks
               ? 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm'
               : 'bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white shadow-primary-500/30 hover:shadow-primary-500/40 disabled:opacity-50 disabled:cursor-not-allowed'"
