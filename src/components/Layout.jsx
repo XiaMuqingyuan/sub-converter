@@ -38,8 +38,9 @@ export const Layout = (props) => {
             theme: {
               extend: {
                 boxShadow: {
-                  soft: '0 20px 60px -32px rgba(15, 23, 42, 0.28)',
-                  glow: '0 24px 80px -36px rgba(10, 163, 235, 0.55)'
+                  soft: '0 20px 60px -32px rgba(15, 23, 42, 0.22)',
+                  glow: '0 28px 90px -42px rgba(10, 163, 235, 0.55)',
+                  glass: '0 24px 70px -42px rgba(15, 23, 42, 0.32)'
                 },
                 colors: {
                   primary: {
@@ -80,36 +81,34 @@ export const Layout = (props) => {
             overflow-x: hidden;
           }
 
-          /* Subtle radial gradient background */
           body::before {
             content: '';
             position: fixed;
             inset: 0;
             z-index: -2;
             background:
-              radial-gradient(ellipse 90% 55% at 50% -18%, rgba(10, 163, 235, 0.18) 0%, transparent 62%),
-              radial-gradient(ellipse 65% 42% at 96% 68%, rgba(51, 197, 255, 0.12) 0%, transparent 54%),
-              radial-gradient(ellipse 55% 36% at 4% 88%, rgba(0, 130, 202, 0.10) 0%, transparent 55%),
-              linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(239, 246, 255, 0.54) 52%, rgba(255, 255, 255, 0.92) 100%);
+              radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.95) 0%, transparent 34%),
+              radial-gradient(ellipse 72% 50% at 16% 12%, rgba(10, 163, 235, 0.16) 0%, transparent 58%),
+              radial-gradient(ellipse 52% 42% at 92% 28%, rgba(147, 197, 253, 0.22) 0%, transparent 58%),
+              linear-gradient(180deg, #f8fbff 0%, #eef6ff 45%, #ffffff 100%);
             pointer-events: none;
           }
 
           .dark body::before,
           html.dark body::before {
             background:
-              radial-gradient(ellipse 90% 55% at 50% -18%, rgba(10, 163, 235, 0.18) 0%, transparent 62%),
-              radial-gradient(ellipse 65% 42% at 96% 68%, rgba(51, 197, 255, 0.10) 0%, transparent 54%),
-              radial-gradient(ellipse 55% 36% at 4% 88%, rgba(0, 130, 202, 0.10) 0%, transparent 55%),
-              linear-gradient(180deg, rgba(11, 15, 25, 0.98) 0%, rgba(17, 24, 39, 0.96) 52%, rgba(11, 15, 25, 1) 100%);
+              radial-gradient(circle at 50% -10%, rgba(51, 197, 255, 0.18) 0%, transparent 34%),
+              radial-gradient(ellipse 72% 50% at 16% 12%, rgba(10, 163, 235, 0.14) 0%, transparent 58%),
+              radial-gradient(ellipse 52% 42% at 92% 28%, rgba(59, 130, 246, 0.16) 0%, transparent 58%),
+              linear-gradient(180deg, #070b13 0%, #0b1220 50%, #070b13 100%);
           }
 
-          /* Subtle noise texture overlay */
           body::after {
             content: '';
             position: fixed;
             inset: 0;
             z-index: -1;
-            opacity: 0.3;
+            opacity: 0.18;
             pointer-events: none;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
             background-repeat: repeat;
@@ -122,27 +121,29 @@ export const Layout = (props) => {
           }
 
           .glass-panel {
-            border: 1px solid rgba(255, 255, 255, 0.70);
-            background: rgba(255, 255, 255, 0.76);
-            box-shadow: 0 20px 60px -32px rgba(15, 23, 42, 0.28);
-            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.46));
+            box-shadow: 0 24px 70px -42px rgba(15, 23, 42, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(26px) saturate(150%);
+            -webkit-backdrop-filter: blur(26px) saturate(150%);
           }
 
           .dark .glass-panel,
           html.dark .glass-panel {
-            border-color: rgba(55, 65, 81, 0.78);
-            background: rgba(17, 24, 39, 0.70);
-            box-shadow: 0 22px 70px -38px rgba(0, 0, 0, 0.78);
+            border-color: rgba(255, 255, 255, 0.10);
+            background: linear-gradient(145deg, rgba(17, 24, 39, 0.66), rgba(15, 23, 42, 0.42));
+            box-shadow: 0 28px 80px -46px rgba(0, 0, 0, 0.86), inset 0 1px 0 rgba(255, 255, 255, 0.08);
           }
 
           .premium-card {
-            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+            transform: translateZ(0);
+            transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 260ms ease, border-color 260ms ease, background 260ms ease;
           }
 
           .premium-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(10, 163, 235, 0.30);
-            box-shadow: 0 24px 70px -36px rgba(10, 163, 235, 0.48);
+            transform: translateY(-3px) scale(1.005);
+            border-color: rgba(10, 163, 235, 0.24);
+            box-shadow: 0 30px 90px -46px rgba(10, 163, 235, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.82);
           }
 
           .dark .premium-card:hover,
@@ -155,10 +156,42 @@ export const Layout = (props) => {
             width: 18rem;
             height: 18rem;
             border-radius: 9999px;
-            background: linear-gradient(135deg, rgba(51, 197, 255, 0.28), rgba(10, 163, 235, 0.06));
-            filter: blur(10px);
-            opacity: 0.75;
+            background: linear-gradient(135deg, rgba(51, 197, 255, 0.24), rgba(255, 255, 255, 0.08));
+            filter: blur(14px);
+            opacity: 0.72;
             pointer-events: none;
+            animation: float-orb 12s ease-in-out infinite alternate;
+          }
+
+          .interactive-soft {
+            transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms ease, background 220ms ease, color 220ms ease, border-color 220ms ease;
+          }
+
+          .interactive-soft:hover {
+            transform: translateY(-1px);
+          }
+
+          .fade-up {
+            animation: fade-up 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+          }
+
+          @keyframes float-orb {
+            from { transform: translate3d(0, 0, 0) scale(1); }
+            to { transform: translate3d(18px, 24px, 0) scale(1.06); }
+          }
+
+          @keyframes fade-up {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+              animation-duration: 0.01ms !important;
+              animation-iteration-count: 1 !important;
+              scroll-behavior: auto !important;
+              transition-duration: 0.01ms !important;
+            }
           }
 
           [x-cloak] { display: none !important; }
