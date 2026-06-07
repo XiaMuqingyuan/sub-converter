@@ -36,8 +36,8 @@ export const TextareaWithActions = (props) => {
   }
 
   const classNames = [
-    'w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 resize-y placeholder-gray-400 dark:placeholder-gray-500',
-    variant === 'mono' ? 'font-mono text-sm bg-gray-50 dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-900',
+    'w-full rounded-2xl border border-gray-200/80 px-4 py-3 text-gray-900 shadow-inner shadow-gray-100/70 outline-none transition-all duration-200 resize-y placeholder-gray-400 focus:border-primary-300 focus:ring-4 focus:ring-primary-500/10 dark:border-gray-700/80 dark:text-white dark:shadow-black/20 dark:placeholder-gray-500 dark:focus:border-primary-700',
+    variant === 'mono' ? 'font-mono text-sm bg-gray-50/80 dark:bg-gray-950/70' : 'bg-gray-50/80 dark:bg-gray-950/70',
     textareaClass
   ]
     .filter(Boolean)

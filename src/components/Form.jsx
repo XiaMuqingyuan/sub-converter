@@ -46,11 +46,11 @@ export const Form = (props) => {
   `;
 
   return (
-    <div x-data="formData()" x-init="init()" class="max-w-4xl mx-auto">
+    <div x-data="formData()" x-init="init()" class="mx-auto max-w-5xl">
       <form {...{'x-on:submit.prevent': 'submitForm'}} class="space-y-8">
 
       {/* Input Section */}
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-md group">
+      <div class="glass-panel premium-card rounded-3xl p-6 md:p-8 group">
         <TextareaWithActions
           id="input"
           name="input"
@@ -97,7 +97,7 @@ export const Form = (props) => {
 
       {/* Advanced Options Toggle */}
       <div 
-        class="flex items-center justify-between bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" 
+        class="glass-panel premium-card flex cursor-pointer items-center justify-between rounded-2xl p-4" 
         x-on:click="showAdvanced = !showAdvanced"
         role="button"
         tabindex="0"
@@ -107,13 +107,13 @@ export const Form = (props) => {
         }}
       >
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 flex items-center justify-center">
+          <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-300">
             <i class="fas fa-sliders-h"></i>
           </div>
           <span class="font-semibold text-gray-900 dark:text-white">{t('advancedOptions')}</span>
         </div>
         <div 
-          class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 transition-transform duration-300" 
+          class="flex h-8 w-8 items-center justify-center rounded-full bg-white/70 text-gray-500 shadow-sm transition-transform duration-300 dark:bg-gray-800/80 dark:text-gray-400" 
           x-bind:class="{'rotate-180': showAdvanced}"
         >
           <i class="fas fa-chevron-down"></i>
@@ -124,7 +124,7 @@ export const Form = (props) => {
   <div x-show="showAdvanced" {...{'x-transition:enter': 'transition ease-out duration-300', 'x-transition:enter-start': 'opacity-0 transform -translate-y-4', 'x-transition:enter-end': 'opacity-100 transform translate-y-0', 'x-transition:leave': 'transition ease-in duration-200', 'x-transition:leave-start': 'opacity-100 transform translate-y-0', 'x-transition:leave-end': 'opacity-0 transform -translate-y-4'}} class="space-y-6">
 
     {/* Rule Selection */ }
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="glass-panel premium-card rounded-3xl p-6">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <i class="fas fa-filter text-gray-400"></i>
@@ -140,7 +140,7 @@ export const Form = (props) => {
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
     {UNIFIED_RULES.map((rule) => (
-      <label class="flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors group">
+      <label class="group flex cursor-pointer items-center rounded-2xl border border-gray-200/80 bg-white/50 p-3 transition-colors hover:border-primary-200 hover:bg-primary-50/60 dark:border-gray-700/80 dark:bg-gray-900/30 dark:hover:border-primary-800 dark:hover:bg-primary-950/20">
         <input
           type="checkbox"
           value={rule.name}
@@ -161,14 +161,14 @@ export const Form = (props) => {
   <CustomRules t={t} />
 
     {/* General Options */ }
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="glass-panel premium-card rounded-3xl p-6">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <i class="fas fa-cog text-gray-400"></i>
               {t('generalSettings')}
             </h3>
             
             <div class="space-y-4">
-              <label class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700/30 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors cursor-pointer">
+              <label class="flex cursor-pointer items-center justify-between rounded-2xl border border-gray-200/70 bg-white/50 p-3 transition-colors hover:border-primary-200 hover:bg-primary-50/60 dark:border-gray-700/70 dark:bg-gray-900/30 dark:hover:border-primary-800 dark:hover:bg-primary-950/20">
                 <span class="font-medium text-gray-700 dark:text-gray-300">{t('groupByCountry')}</span>
                 <div class="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" x-model="groupByCountry" class="sr-only peer" />
@@ -176,7 +176,7 @@ export const Form = (props) => {
                 </div>
               </label>
 
-              <label class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700/30 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors cursor-pointer">
+              <label class="flex cursor-pointer items-center justify-between rounded-2xl border border-gray-200/70 bg-white/50 p-3 transition-colors hover:border-primary-200 hover:bg-primary-50/60 dark:border-gray-700/70 dark:bg-gray-900/30 dark:hover:border-primary-800 dark:hover:bg-primary-950/20">
                 <span class="font-medium text-gray-700 dark:text-gray-300">{t('includeAutoSelect')}</span>
                 <div class="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" x-model="includeAutoSelect" class="sr-only peer" />
@@ -184,7 +184,7 @@ export const Form = (props) => {
                 </div>
               </label>
 
-              <label class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700/30 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors cursor-pointer">
+              <label class="flex cursor-pointer items-center justify-between rounded-2xl border border-gray-200/70 bg-white/50 p-3 transition-colors hover:border-primary-200 hover:bg-primary-50/60 dark:border-gray-700/70 dark:bg-gray-900/30 dark:hover:border-primary-800 dark:hover:bg-primary-950/20">
                 <span class="font-medium text-gray-700 dark:text-gray-300">{t('enableClashUI')}</span>
                 <div class="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" x-model="enableClashUI" class="sr-only peer" />
@@ -217,13 +217,13 @@ export const Form = (props) => {
           </div>
 
   {/* Subconverter External Config */}
-  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+  <div class="glass-panel premium-card rounded-3xl p-6">
     <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-2">
       <i class="fas fa-file-export text-gray-400"></i>
       {t('subconverterConfigTitle')}
     </h3>
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('subconverterConfigDesc')}</p>
-    <div class="px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+    <div class="rounded-2xl border border-gray-200/80 bg-white/55 px-4 py-3 shadow-inner shadow-gray-100/70 dark:border-gray-700/80 dark:bg-gray-950/60 dark:shadow-black/20">
       <p class="font-mono text-sm text-gray-600 dark:text-gray-400 break-all" x-text="getSubconverterUrl()"></p>
     </div>
     <div class="mt-3 flex justify-end">
@@ -240,7 +240,7 @@ export const Form = (props) => {
   </div>
 
   {/* Base Config */ }
-  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+  <div class="glass-panel premium-card rounded-3xl p-6">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <i class="fas fa-file-code text-gray-400"></i>
@@ -305,7 +305,7 @@ export const Form = (props) => {
           </div >
 
   {/* User Agent */ }
-  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+  <div class="glass-panel premium-card rounded-3xl p-6">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <i class="fas fa-user-secret text-gray-400"></i>
               {t('UASettings')}
@@ -323,7 +323,7 @@ export const Form = (props) => {
   <div class="flex flex-col sm:flex-row gap-4">
           <button 
             type="submit" 
-            class="flex-1 py-3.5 px-6 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white rounded-xl font-bold shadow-lg shadow-primary-500/30 hover:shadow-primary-500/40 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2"
+            class="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-primary-600 to-primary-400 px-6 py-4 font-bold text-white shadow-glow shadow-primary-500/30 transition-all duration-200 hover:-translate-y-0.5 hover:from-primary-700 hover:to-primary-500 hover:shadow-primary-500/40 disabled:cursor-not-allowed disabled:opacity-70"
             x-bind:disabled="loading"
           >
             <i class="fas fa-sync-alt" x-bind:class="loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'"></i>
@@ -333,7 +333,7 @@ export const Form = (props) => {
   <button
     type="button" 
             x-on:click="clearAll()"
-class="px-6 py-3.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
+class="flex items-center justify-center gap-2 rounded-2xl border border-gray-200/80 bg-white/75 px-6 py-4 font-semibold text-gray-700 shadow-sm transition-all duration-200 hover:bg-white dark:border-gray-700/80 dark:bg-gray-900/70 dark:text-gray-300 dark:hover:bg-gray-800"
   >
   <i class="fas fa-trash-alt"></i>
 { t('clear') }
@@ -343,7 +343,7 @@ class="px-6 py-3.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 bo
 
   {/* Results Section */ }
   <div x-cloak x-show="generatedLinks" x-data="{ copied: null }" {...{'x-transition:enter': 'transition ease-out duration-500', 'x-transition:enter-start': 'opacity-0 transform translate-y-8', 'x-transition:enter-end': 'opacity-100 transform translate-y-0'}} class="mt-12">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-8 transition-all duration-300 hover:shadow-md">
+    <div class="glass-panel premium-card mb-8 rounded-3xl p-6 md:p-8">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <span class="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 flex items-center justify-center">

@@ -44,16 +44,22 @@ export function createApp(bindings = {}) {
 
         return c.html(
             <Layout title={t('pageTitle')} description={t('pageDescription')} keywords={t('pageKeywords')}>
-                <div class="flex flex-col min-h-screen">
+                <div class="relative flex min-h-screen flex-col overflow-hidden">
+                    <div class="hero-orb -top-28 -left-24"></div>
+                    <div class="hero-orb top-36 -right-28 hidden md:block"></div>
                     <Navbar />
-                    <main class="flex-1">
-                        <div class="container mx-auto px-4 py-8 pt-24">
-                            <div class="max-w-4xl mx-auto">
-                                <div class="text-center mb-12 pt-8">
-                                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
+                    <main class="relative z-10 flex-1">
+                        <div class="container mx-auto px-4 pb-12 pt-28 md:pt-32">
+                            <div class="mx-auto max-w-5xl">
+                                <div class="mx-auto mb-12 max-w-3xl text-center md:mb-14">
+                                    <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-primary-200/80 bg-white/70 px-4 py-2 text-sm font-semibold text-primary-700 shadow-sm backdrop-blur dark:border-primary-800/60 dark:bg-primary-950/30 dark:text-primary-300">
+                                        <i class="fas fa-wand-magic-sparkles text-primary-500"></i>
+                                        <span>Subscription Converter</span>
+                                    </div>
+                                    <h1 class="mb-5 bg-gradient-to-br from-gray-950 via-gray-800 to-primary-700 bg-clip-text text-5xl font-black tracking-tight text-transparent dark:from-white dark:via-gray-100 dark:to-primary-300 md:text-7xl">
                                         {APP_NAME}
                                     </h1>
-                                    <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                                    <p class="mx-auto max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-300 md:text-xl">
                                         {subtitle}
                                     </p>
                                 </div>
@@ -412,7 +418,7 @@ export function createApp(bindings = {}) {
 }
 
 export function parseSelectedRules(raw) {
-    if (!raw) return [];
+    if (!raw) return PREDEFINED_RULE_SETS.balanced;
 
     // 首先检查是否是预设名称 (minimal, balanced, comprehensive)
     // 这确保向后兼容主分支的 API 行为
@@ -425,9 +431,9 @@ export function parseSelectedRules(raw) {
         const parsed = JSON.parse(raw);
         return Array.isArray(parsed) ? parsed : [];
     } catch {
-        // 解析失败，回退到 minimal 预设
-        console.warn(`Failed to parse selectedRules: ${raw}, falling back to minimal`);
-        return PREDEFINED_RULE_SETS.minimal;
+        // 解析失败，回退到 balanced 预设
+        console.warn(`Failed to parse selectedRules: ${raw}, falling back to balanced`);
+        return PREDEFINED_RULE_SETS.balanced;
     }
 }
 

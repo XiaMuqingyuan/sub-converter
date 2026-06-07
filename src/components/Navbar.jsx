@@ -4,19 +4,21 @@ import { APP_NAME, GITHUB_REPO, DOCS_URL } from '../constants.js';
 
 export const Navbar = () => {
     return (
-        <nav class="fixed top-0 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-gray-800 z-50 transition-all duration-300">
+        <nav class="fixed top-0 z-50 w-full border-b border-white/60 bg-white/70 shadow-sm backdrop-blur-xl transition-all duration-300 dark:border-gray-800/80 dark:bg-gray-950/70">
             <div class="container mx-auto px-4">
-                <div class="flex items-center justify-between h-16">
-                    <a href="#" class="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white hover:text-primary-500 dark:hover:text-primary-400 transition-colors">
-                        <img src="/favicon.ico" alt={`${APP_NAME} logo`} class="w-6 h-6" />
+                <div class="flex h-16 items-center justify-between">
+                    <a href="#" class="flex items-center gap-3 text-xl font-black tracking-tight text-gray-950 transition-colors hover:text-primary-600 dark:text-white dark:hover:text-primary-300">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-400 to-primary-700 shadow-glow shadow-primary-500/20">
+                            <img src="/favicon.ico" alt={`${APP_NAME} logo`} class="h-5 w-5" />
+                        </span>
                         <span>{APP_NAME}</span>
                     </a>
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2 sm:gap-3">
                         <a
                             href={DOCS_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="px-4 py-2 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
+                            class="hidden items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-white/80 hover:text-primary-700 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-primary-300 sm:flex"
                         >
                             <i class="fas fa-book"></i>
                             <span>Docs</span>
@@ -25,13 +27,13 @@ export const Navbar = () => {
                             href={GITHUB_REPO}
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="px-4 py-2 text-gray-700 dark:text-gray-300 rounded-full text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-2 font-medium"
+                            class="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-white/80 hover:text-primary-700 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-primary-300"
                         >
                             <i class="fab fa-github"></i>
                             <span>GitHub</span>
                         </a>
                         <button
-                            class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
+                            class="rounded-full border border-gray-200/80 bg-white/70 p-2 text-gray-500 shadow-sm transition-colors hover:border-primary-200 hover:text-primary-600 dark:border-gray-700/80 dark:bg-gray-900/70 dark:text-gray-400 dark:hover:border-primary-800 dark:hover:text-primary-300"
                             x-on:click="toggleDarkMode()"
                             aria-label="Toggle dark mode"
                         >

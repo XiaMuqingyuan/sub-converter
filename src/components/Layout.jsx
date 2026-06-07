@@ -37,6 +37,10 @@ export const Layout = (props) => {
             darkMode: 'class',
             theme: {
               extend: {
+                boxShadow: {
+                  soft: '0 20px 60px -32px rgba(15, 23, 42, 0.28)',
+                  glow: '0 24px 80px -36px rgba(10, 163, 235, 0.55)'
+                },
                 colors: {
                   primary: {
                     50: '#eef9ff',
@@ -65,10 +69,15 @@ export const Layout = (props) => {
           }
         </script>
         <style>
+          html {
+            scroll-behavior: smooth;
+          }
+
           body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             position: relative;
             min-height: 100vh;
+            overflow-x: hidden;
           }
 
           /* Subtle radial gradient background */
@@ -78,18 +87,20 @@ export const Layout = (props) => {
             inset: 0;
             z-index: -2;
             background:
-              radial-gradient(ellipse 80% 50% at 50% -20%, rgba(10, 163, 235, 0.08) 0%, transparent 60%),
-              radial-gradient(ellipse 60% 40% at 90% 80%, rgba(51, 197, 255, 0.05) 0%, transparent 50%),
-              radial-gradient(ellipse 50% 30% at 10% 90%, rgba(0, 130, 202, 0.04) 0%, transparent 50%);
+              radial-gradient(ellipse 90% 55% at 50% -18%, rgba(10, 163, 235, 0.18) 0%, transparent 62%),
+              radial-gradient(ellipse 65% 42% at 96% 68%, rgba(51, 197, 255, 0.12) 0%, transparent 54%),
+              radial-gradient(ellipse 55% 36% at 4% 88%, rgba(0, 130, 202, 0.10) 0%, transparent 55%),
+              linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(239, 246, 255, 0.54) 52%, rgba(255, 255, 255, 0.92) 100%);
             pointer-events: none;
           }
 
           .dark body::before,
           html.dark body::before {
             background:
-              radial-gradient(ellipse 80% 50% at 50% -20%, rgba(10, 163, 235, 0.12) 0%, transparent 60%),
-              radial-gradient(ellipse 60% 40% at 90% 80%, rgba(51, 197, 255, 0.06) 0%, transparent 50%),
-              radial-gradient(ellipse 50% 30% at 10% 90%, rgba(0, 130, 202, 0.05) 0%, transparent 50%);
+              radial-gradient(ellipse 90% 55% at 50% -18%, rgba(10, 163, 235, 0.18) 0%, transparent 62%),
+              radial-gradient(ellipse 65% 42% at 96% 68%, rgba(51, 197, 255, 0.10) 0%, transparent 54%),
+              radial-gradient(ellipse 55% 36% at 4% 88%, rgba(0, 130, 202, 0.10) 0%, transparent 55%),
+              linear-gradient(180deg, rgba(11, 15, 25, 0.98) 0%, rgba(17, 24, 39, 0.96) 52%, rgba(11, 15, 25, 1) 100%);
           }
 
           /* Subtle noise texture overlay */
@@ -108,6 +119,46 @@ export const Layout = (props) => {
           .dark body::after,
           html.dark body::after {
             opacity: 0.15;
+          }
+
+          .glass-panel {
+            border: 1px solid rgba(255, 255, 255, 0.70);
+            background: rgba(255, 255, 255, 0.76);
+            box-shadow: 0 20px 60px -32px rgba(15, 23, 42, 0.28);
+            backdrop-filter: blur(18px);
+          }
+
+          .dark .glass-panel,
+          html.dark .glass-panel {
+            border-color: rgba(55, 65, 81, 0.78);
+            background: rgba(17, 24, 39, 0.70);
+            box-shadow: 0 22px 70px -38px rgba(0, 0, 0, 0.78);
+          }
+
+          .premium-card {
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+          }
+
+          .premium-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(10, 163, 235, 0.30);
+            box-shadow: 0 24px 70px -36px rgba(10, 163, 235, 0.48);
+          }
+
+          .dark .premium-card:hover,
+          html.dark .premium-card:hover {
+            border-color: rgba(51, 197, 255, 0.26);
+          }
+
+          .hero-orb {
+            position: absolute;
+            width: 18rem;
+            height: 18rem;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, rgba(51, 197, 255, 0.28), rgba(10, 163, 235, 0.06));
+            filter: blur(10px);
+            opacity: 0.75;
+            pointer-events: none;
           }
 
           [x-cloak] { display: none !important; }
@@ -252,7 +303,7 @@ export const Layout = (props) => {
           }
         </script>
       </head>
-      <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+      <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
         ${children}
       </body>
     </html>
