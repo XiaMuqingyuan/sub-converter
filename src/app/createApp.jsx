@@ -48,12 +48,18 @@ export function createApp(bindings = {}) {
                     <Navbar />
                     <main class="relative z-10 flex-1">
                         <div class="container mx-auto px-4 pb-12 pt-24 md:pt-28">
-                            <div class="mx-auto max-w-[970px] overflow-hidden rounded-2xl bg-white shadow-2xl shadow-black/10 dark:bg-[#2b2b2b] dark:shadow-black/30">
-                                <div class="bg-gradient-to-r from-[#229bc6] to-[#08ad72] px-6 py-16 text-center md:py-20">
-                                    <h1 class="text-5xl font-light tracking-wide text-white md:text-6xl">
-                                        {t('navConvert') || APP_NAME}
+                            <div class="glass-panel mx-auto max-w-[970px] overflow-hidden rounded-[2rem]">
+                                <div class="relative overflow-hidden bg-gradient-to-br from-[#229bc6] via-[#14a899] to-[#08ad72] px-6 py-14 text-center md:py-20">
+                                    <div class="absolute -left-20 -top-24 h-56 w-56 rounded-full bg-white/20 blur-3xl"></div>
+                                    <div class="absolute -bottom-28 right-8 h-64 w-64 rounded-full bg-cyan-200/20 blur-3xl"></div>
+                                    <div class="relative mx-auto mb-5 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-medium text-white/90 backdrop-blur">
+                                        <i class="fas fa-wand-magic-sparkles"></i>
+                                        <span>{APP_NAME}</span>
+                                    </div>
+                                    <h1 class="relative text-5xl font-semibold tracking-wide text-white drop-shadow-sm md:text-6xl">
+                                        在线订阅转换
                                     </h1>
-                                    <p class="sr-only">{subtitle}</p>
+                                    <p class="relative mx-auto mt-4 max-w-2xl text-base leading-7 text-white/80 md:text-lg">{subtitle}</p>
                                 </div>
                                 <Form t={t} lang={lang} />
                             </div>

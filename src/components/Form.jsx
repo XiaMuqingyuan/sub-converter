@@ -46,11 +46,11 @@ export const Form = (props) => {
   `;
 
   return (
-    <div x-data="formData()" x-init="init()" class="px-10 py-10 md:px-12">
+    <div x-data="formData()" x-init="init()" class="px-6 py-8 md:px-12 md:py-10">
       <form {...{'x-on:submit.prevent': 'submitForm'}} class="space-y-8">
 
       {/* Input Section */}
-      <div class="group rounded-xl border border-black/10 p-8 dark:border-white/10">
+      <div class="group rounded-2xl border border-black/10 bg-white/70 p-6 shadow-soft dark:border-white/10 dark:bg-white/[0.04] md:p-8">
         <TextareaWithActions
           id="input"
           name="input"
@@ -97,7 +97,7 @@ export const Form = (props) => {
 
       {/* Advanced Options Toggle */}
       <div 
-        class="flex cursor-pointer items-center justify-between rounded-xl border border-black/10 p-4 dark:border-white/10" 
+        class="interactive-soft flex cursor-pointer items-center justify-between rounded-2xl border border-black/10 bg-white/60 p-4 shadow-sm hover:border-primary-300 hover:bg-white/90 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-primary-400/40 dark:hover:bg-white/[0.07]" 
         x-on:click="showAdvanced = !showAdvanced"
         role="button"
         tabindex="0"
@@ -124,7 +124,7 @@ export const Form = (props) => {
   <div x-show="showAdvanced" {...{'x-transition:enter': 'transition ease-out duration-300', 'x-transition:enter-start': 'opacity-0 transform -translate-y-4', 'x-transition:enter-end': 'opacity-100 transform translate-y-0', 'x-transition:leave': 'transition ease-in duration-200', 'x-transition:leave-start': 'opacity-100 transform translate-y-0', 'x-transition:leave-end': 'opacity-0 transform -translate-y-4'}} class="space-y-6">
 
     {/* Rule Selection */ }
-    <div class="rounded-xl border border-black/10 p-8 dark:border-white/10">
+    <div class="rounded-2xl border border-black/10 bg-white/65 p-6 shadow-sm dark:border-white/10 dark:bg-white/[0.04] md:p-8">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <i class="fas fa-filter text-gray-400"></i>
@@ -161,7 +161,7 @@ export const Form = (props) => {
   <CustomRules t={t} />
 
     {/* General Options */ }
-    <div class="rounded-xl border border-black/10 p-8 dark:border-white/10">
+    <div class="rounded-2xl border border-black/10 bg-white/65 p-6 shadow-sm dark:border-white/10 dark:bg-white/[0.04] md:p-8">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <i class="fas fa-cog text-gray-400"></i>
               {t('generalSettings')}
@@ -217,7 +217,7 @@ export const Form = (props) => {
           </div>
 
   {/* Subconverter External Config */}
-  <div class="rounded-xl border border-black/10 p-8 dark:border-white/10">
+  <div class="rounded-2xl border border-black/10 bg-white/65 p-6 shadow-sm dark:border-white/10 dark:bg-white/[0.04] md:p-8">
     <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-2">
       <i class="fas fa-file-export text-gray-400"></i>
       {t('subconverterConfigTitle')}
@@ -240,7 +240,7 @@ export const Form = (props) => {
   </div>
 
   {/* Base Config */ }
-  <div class="rounded-xl border border-black/10 p-8 dark:border-white/10">
+   <div class="rounded-2xl border border-black/10 bg-white/65 p-6 shadow-sm dark:border-white/10 dark:bg-white/[0.04] md:p-8">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <i class="fas fa-file-code text-gray-400"></i>
@@ -305,7 +305,7 @@ export const Form = (props) => {
           </div >
 
   {/* User Agent */ }
-  <div class="rounded-xl border border-black/10 p-8 dark:border-white/10">
+  <div class="rounded-2xl border border-black/10 bg-white/65 p-6 shadow-sm dark:border-white/10 dark:bg-white/[0.04] md:p-8">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <i class="fas fa-user-secret text-gray-400"></i>
               {t('UASettings')}
@@ -323,7 +323,7 @@ export const Form = (props) => {
   <div class="flex flex-col sm:flex-row gap-4">
           <button 
             type="submit" 
-            class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#229bc6] to-[#08ad72] px-6 py-4 font-bold text-white hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
+            class="interactive-soft flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#229bc6] via-[#14a899] to-[#08ad72] px-6 py-4 font-bold text-white shadow-glow shadow-primary-500/25 hover:shadow-primary-500/40 disabled:cursor-not-allowed disabled:opacity-70"
             x-bind:disabled="loading"
           >
             <i class="fas fa-sync-alt" x-bind:class="loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'"></i>
@@ -333,7 +333,7 @@ export const Form = (props) => {
   <button
     type="button" 
             x-on:click="clearAll()"
-class="flex items-center justify-center gap-2 rounded-lg border border-black/10 px-6 py-4 font-semibold text-gray-700 hover:bg-gray-100 dark:border-white/15 dark:text-gray-300 dark:hover:bg-white/10"
+class="interactive-soft flex items-center justify-center gap-2 rounded-xl border border-black/10 bg-white/60 px-6 py-4 font-semibold text-gray-700 hover:bg-white dark:border-white/15 dark:bg-white/[0.04] dark:text-gray-300 dark:hover:bg-white/10"
   >
   <i class="fas fa-trash-alt"></i>
 { t('clear') }
@@ -343,7 +343,7 @@ class="flex items-center justify-center gap-2 rounded-lg border border-black/10 
 
   {/* Results Section */ }
   <div x-cloak x-show="generatedLinks" x-data="{ copied: null }" {...{'x-transition:enter': 'transition ease-out duration-500', 'x-transition:enter-start': 'opacity-0 transform translate-y-8', 'x-transition:enter-end': 'opacity-100 transform translate-y-0'}} class="mt-12">
-    <div class="mb-8 rounded-xl border border-black/10 p-8 dark:border-white/10">
+    <div class="mb-8 rounded-2xl border border-black/10 bg-white/65 p-6 shadow-soft dark:border-white/10 dark:bg-white/[0.04] md:p-8">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <span class="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 flex items-center justify-center">

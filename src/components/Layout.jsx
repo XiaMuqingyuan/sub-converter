@@ -86,27 +86,52 @@ export const Layout = (props) => {
             position: fixed;
             inset: 0;
             z-index: -2;
-            background: #f5f5f7;
+            background:
+              radial-gradient(circle at 18% 8%, rgba(34, 155, 198, 0.16), transparent 28rem),
+              radial-gradient(circle at 82% 0%, rgba(8, 173, 114, 0.14), transparent 30rem),
+              linear-gradient(180deg, #f8fafc 0%, #f5f5f7 46%, #eef6f4 100%);
             pointer-events: none;
           }
 
           .dark body::before,
           html.dark body::before {
-            background: #171717;
+            background:
+              radial-gradient(circle at 18% 8%, rgba(34, 155, 198, 0.18), transparent 28rem),
+              radial-gradient(circle at 82% 0%, rgba(8, 173, 114, 0.14), transparent 30rem),
+              linear-gradient(180deg, #121826 0%, #171717 52%, #0f1f1c 100%);
           }
 
-          body::after { content: none; }
+          body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image:
+              linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent 70%);
+            pointer-events: none;
+          }
+
+          .dark body::after,
+          html.dark body::after {
+            background-image:
+              linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+          }
 
           .glass-panel {
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            background: #ffffff;
-            box-shadow: none;
+            border: 1px solid rgba(255, 255, 255, 0.68);
+            background: rgba(255, 255, 255, 0.82);
+            box-shadow: 0 24px 70px -42px rgba(15, 23, 42, 0.32);
+            backdrop-filter: blur(18px);
           }
 
           .dark .glass-panel,
           html.dark .glass-panel {
             border-color: rgba(255, 255, 255, 0.12);
-            background: #303030;
+            background: rgba(48, 48, 48, 0.78);
           }
 
           .premium-card {
