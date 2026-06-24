@@ -7,10 +7,10 @@ export const CustomRules = (props) => {
     const { t } = props;
 
     return (
-        <div x-data="customRulesData()" class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <div class="flex items-center justify-between mb-4">
+        <div x-data="customRulesData()" class="glass-card rounded-2xl p-6 md:p-8">
+            <div class="flex items-center justify-between mb-5">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                    <i class="fas fa-stream text-gray-400"></i>
+                    <i class="fas fa-stream text-primary-500/60 dark:text-primary-400/60"></i>
                     {t('customRulesSection')}
                 </h3>
             </div>
@@ -18,19 +18,19 @@ export const CustomRules = (props) => {
             <div class="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-6 gap-4">
                 <p class="text-sm text-gray-500 dark:text-gray-400">{t('customRulesSectionTooltip')}</p>
 
-                <div class="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                <div class="flex bg-gray-100/80 dark:bg-white/[0.06] rounded-xl p-1">
                     <button
                         type="button" x-on:click="mode = 'form'"
-                    x-bind:class="{'bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow-sm': mode === 'form', 'text-gray-500 dark:text-gray-400': mode !== 'form'}"
-                    class="px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2"
+                    x-bind:class="{'bg-white dark:bg-white/[0.10] text-primary-600 dark:text-primary-400 shadow-sm': mode === 'form', 'text-gray-500 dark:text-gray-400': mode !== 'form'}"
+                    class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2"
           >
                     <i class="fas fa-list"></i>
                     {t('customRulesForm')}
                 </button>
                 <button
                     type="button" x-on:click="mode = 'json'"
-                x-bind:class="{'bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow-sm': mode === 'json', 'text-gray-500 dark:text-gray-400': mode !== 'json'}"
-                class="px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2"
+                x-bind:class="{'bg-white dark:bg-white/[0.10] text-primary-600 dark:text-primary-400 shadow-sm': mode === 'json', 'text-gray-500 dark:text-gray-400': mode !== 'json'}"
+                class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2"
           >
                 <i class="fas fa-code"></i>
                 {t('customRulesJSON')}
@@ -41,12 +41,12 @@ export const CustomRules = (props) => {
     {/* Form Mode */ }
     <div x-show="mode === 'form'" {...{'x-transition:enter': 'transition ease-out duration-300', 'x-transition:enter-start': 'opacity-0 transform scale-95', 'x-transition:enter-end': 'opacity-100 transform scale-100'}}>
         <template x-if="rules.length === 0">
-            <div class="text-center py-12 bg-gray-50 dark:bg-gray-700/30 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700">
-                <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
+            <div class="text-center py-12 bg-white/50 dark:bg-white/[0.03] rounded-xl border-2 border-dashed border-black/10 dark:border-white/10">
+                <div class="w-16 h-16 bg-gray-100 dark:bg-white/[0.06] rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
                     <i class="fas fa-plus text-2xl"></i>
                 </div>
                 <p class="text-gray-500 dark:text-gray-400 mb-4">{t('noCustomRulesForm')}</p>
-                <button type="button" x-on:click="addRule()" class="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors duration-200 font-medium">
+                <button type="button" x-on:click="addRule()" class="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl transition-all duration-200 font-medium interactive-soft">
                 {t('addCustomRule')}
             </button>
         </div>
@@ -58,7 +58,7 @@ export const CustomRules = (props) => {
           x-data="{ show: false }"
           x-init="$nextTick(() => show = true)"
           x-show="show"
-          class="bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4 border border-gray-200 dark:border-gray-700 transition-all duration-200 hover:border-primary-200 dark:hover:border-primary-900/50"
+          class="bg-white/60 dark:bg-white/[0.04] rounded-xl p-5 border border-black/6 dark:border-white/8 transition-all duration-200 hover:border-primary-300/40 dark:hover:border-primary-400/20"
           {...{
             'x-transition:enter': 'transition ease-out duration-300',
             'x-transition:enter-start': 'opacity-0 -translate-y-2 scale-95',
@@ -69,15 +69,15 @@ export const CustomRules = (props) => {
             'x-on:custom-rules-clear.window': 'show = false'
           }}
         >
-            <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-black/6 dark:border-white/8">
                 <h3 class="font-medium text-gray-900 dark:text-white flex items-center gap-2">
-                    <span class="w-6 h-6 rounded bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 flex items-center justify-center text-xs" x-text="index + 1"></span>
+                    <span class="w-6 h-6 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 flex items-center justify-center text-xs font-semibold" x-text="index + 1"></span>
                     {t('customRule')}
                 </h3>
                 <button
                   type="button"
                   x-on:click="show = false; setTimeout(() => removeRule(index), 200)"
-                  class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
+                  class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
                 >
                 <i class="fas fa-trash-alt"></i>
             </button>
@@ -86,108 +86,108 @@ export const CustomRules = (props) => {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Rule Name */}
             <div class="col-span-1 md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                     {t('customRuleOutboundName')}
                 </label>
                 <input
                     type="text"
                     x-model="rule.name"
-                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                    class="input-field"
                     placeholder="e.g., MyRule"
                 />
             </div>
 
             {/* Domain Suffix */}
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                     {t('customRuleDomainSuffix')}
                 </label>
                 <input
                     type="text"
                     x-model="rule.domain_suffix"
-                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                    class="input-field"
                     placeholder={t('customRuleDomainSuffixPlaceholder')}
                 />
             </div>
 
             {/* Domain Keyword */}
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                     {t('customRuleDomainKeyword')}
                 </label>
                 <input
                     type="text"
                     x-model="rule.domain_keyword"
-                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                    class="input-field"
                     placeholder={t('customRuleDomainKeywordPlaceholder')}
                 />
             </div>
 
             {/* SRC IP CIDR */}
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 flex items-center gap-1">
                     {t('customRuleSrcIPCIDR')}
                     <i class="fas fa-info-circle text-gray-400 hover:text-primary-500 cursor-help" title={t('customRuleSrcIPCIDRTooltip')}></i>
                 </label>
                 <input
                     type="text"
                     x-model="rule.src_ip_cidr"
-                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                    class="input-field"
                     placeholder={t('customRuleSrcIPCIDRPlaceholder')}
                 />
             </div>
 
             {/* IP CIDR */}
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                     {t('customRuleIPCIDR')}
                 </label>
                 <input
                     type="text"
                     x-model="rule.ip_cidr"
-                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                    class="input-field"
                     placeholder={t('customRuleIPCIDRPlaceholder')}
                 />
             </div>
 
             {/* Protocol */}
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 flex items-center gap-1">
                     {t('customRuleProtocol')}
                     <i class="fas fa-info-circle text-gray-400 hover:text-primary-500 cursor-help" title={t('customRuleProtocolTooltip')}></i>
                 </label>
                 <input
                     type="text"
                     x-model="rule.protocol"
-                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                    class="input-field"
                     placeholder={t('customRuleProtocolPlaceholder')}
                 />
             </div>
 
             {/* Geo-Site */}
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 flex items-center gap-1">
                     {t('customRuleGeoSite')}
                     <i class="fas fa-info-circle text-gray-400 hover:text-primary-500 cursor-help" title={t('customRuleGeoSiteTooltip')}></i>
                 </label>
                 <input
                     type="text"
                     x-model="rule.site"
-                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                    class="input-field"
                     placeholder={t('customRuleGeoSitePlaceholder')}
                 />
             </div>
 
             {/* Geo-IP */}
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 flex items-center gap-1">
                     {t('customRuleGeoIP')}
                     <i class="fas fa-info-circle text-gray-400 hover:text-primary-500 cursor-help" title={t('customRuleGeoIPTooltip')}></i>
                 </label>
                 <input
                     type="text"
                     x-model="rule.ip"
-                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                    class="input-field"
                     placeholder={t('customRuleGeoIPPlaceholder')}
                 />
             </div>
@@ -197,11 +197,11 @@ export const CustomRules = (props) => {
         </div>
 
         <div class="mt-6 flex flex-wrap gap-3">
-          <button type="button" x-on:click="addRule()" class="px-4 py-2 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors duration-200 font-medium flex items-center gap-2">
+          <button type="button" x-on:click="addRule()" class="interactive-soft px-4 py-2.5 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-xl hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-all duration-200 font-medium flex items-center gap-2">
             <i class="fas fa-plus"></i>
             {t('addCustomRule')}
           </button>
-          <button type="button" x-on:click="clearAll()" x-show="rules.length > 0" class="px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors duration-200 font-medium flex items-center gap-2" >
+          <button type="button" x-on:click="clearAll()" x-show="rules.length > 0" class="interactive-soft px-4 py-2.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-all duration-200 font-medium flex items-center gap-2" >
     <i class="fas fa-trash"></i>
 { t('clearAll') }
           </button>

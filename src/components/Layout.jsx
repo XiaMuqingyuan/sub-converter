@@ -39,7 +39,9 @@ export const Layout = (props) => {
               extend: {
                 boxShadow: {
                   soft: '0 20px 60px -32px rgba(15, 23, 42, 0.22)',
+                  glass: '0 8px 32px -12px rgba(0, 0, 0, 0.12)',
                   glow: '0 28px 90px -42px rgba(10, 163, 235, 0.55)',
+                  card: '0 4px 24px -8px rgba(0, 0, 0, 0.08)',
                 },
                 colors: {
                   primary: {
@@ -78,6 +80,18 @@ export const Layout = (props) => {
             overflow-x: hidden;
           }
 
+          /* Custom scrollbar */
+          ::-webkit-scrollbar { width: 8px; height: 8px; }
+          ::-webkit-scrollbar-track { background: transparent; }
+          ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.12); border-radius: 4px; }
+          ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.22); }
+          .dark ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.10); }
+          .dark ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.18); }
+
+          /* Selection color */
+          ::selection { background: rgba(10, 163, 235, 0.18); }
+          .dark ::selection { background: rgba(10, 163, 235, 0.28); }
+
           /* Ambient gradient background */
           body::before {
             content: '';
@@ -85,18 +99,20 @@ export const Layout = (props) => {
             inset: 0;
             z-index: -2;
             background:
-              radial-gradient(circle at 18% 8%, rgba(34, 155, 198, 0.16), transparent 28rem),
-              radial-gradient(circle at 82% 0%, rgba(8, 173, 114, 0.14), transparent 30rem),
-              linear-gradient(180deg, #f8fafc 0%, #f5f5f7 46%, #eef6f4 100%);
+              radial-gradient(circle at 15% 10%, rgba(34, 155, 198, 0.12), transparent 32rem),
+              radial-gradient(circle at 85% 5%, rgba(8, 173, 114, 0.10), transparent 34rem),
+              radial-gradient(circle at 50% 80%, rgba(99, 102, 241, 0.06), transparent 30rem),
+              linear-gradient(180deg, #f8fafc 0%, #f3f4f6 40%, #eef6f4 100%);
             pointer-events: none;
           }
 
-          .dark body::before,
           html.dark body::before {
             background:
-              radial-gradient(circle at 18% 8%, rgba(34, 155, 198, 0.18), transparent 28rem),
-              radial-gradient(circle at 82% 0%, rgba(8, 173, 114, 0.14), transparent 30rem),
-              linear-gradient(180deg, #121826 0%, #171717 52%, #0f1f1c 100%);
+              radial-gradient(circle at 15% 10%, rgba(34, 155, 198, 0.15), transparent 32rem),
+              radial-gradient(circle at 85% 5%, rgba(8, 173, 114, 0.10), transparent 34rem),
+              radial-gradient(circle at 50% 80%, rgba(99, 102, 241, 0.08), transparent 30rem),
+              radial-gradient(circle at 50% 50%, rgba(20, 168, 153, 0.04), transparent 40rem),
+              linear-gradient(180deg, #0f131a 0%, #141a1e 40%, #0d1a17 100%);
           }
 
           /* Subtle grid overlay */
@@ -106,48 +122,134 @@ export const Layout = (props) => {
             inset: 0;
             z-index: -1;
             background-image:
-              linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
-            background-size: 42px 42px;
-            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent 70%);
+              linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent 75%);
             pointer-events: none;
           }
 
-          .dark body::after,
           html.dark body::after {
             background-image:
-              linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+              linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
           }
 
+          /* Glass panel - primary card style */
           .glass-panel {
-            border: 1px solid rgba(255, 255, 255, 0.68);
-            background: rgba(255, 255, 255, 0.82);
-            box-shadow: 0 24px 70px -42px rgba(15, 23, 42, 0.32);
-            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            background: rgba(255, 255, 255, 0.78);
+            box-shadow: 0 8px 32px -12px rgba(0, 0, 0, 0.10);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
           }
 
-          .dark .glass-panel,
           html.dark .glass-panel {
-            border-color: rgba(255, 255, 255, 0.12);
-            background: rgba(48, 48, 48, 0.78);
+            border-color: rgba(255, 255, 255, 0.08);
+            background: rgba(40, 40, 40, 0.70);
+            box-shadow: 0 8px 32px -12px rgba(0, 0, 0, 0.30);
+          }
+
+          /* Glass card - for nested sections */
+          .glass-card {
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            background: rgba(255, 255, 255, 0.60);
+            box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+          }
+
+          html.dark .glass-card {
+            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(50, 50, 50, 0.50);
+            box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.20);
           }
 
           .interactive-soft {
-            transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms ease, background 220ms ease, color 220ms ease, border-color 220ms ease;
+            transition: transform 250ms cubic-bezier(0.18, 0.8, 0.2, 1), box-shadow 250ms ease, background 250ms ease, color 250ms ease, border-color 250ms ease;
           }
 
           .interactive-soft:hover {
             transform: translateY(-1px);
           }
+          .interactive-soft:active {
+            transform: translateY(0px) scale(0.98);
+          }
 
+          /* Fade-up entrance animation */
           .fade-up {
-            animation: fade-up 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+            animation: fade-up 560ms cubic-bezier(0.18, 0.8, 0.2, 1) both;
           }
 
           @keyframes fade-up {
-            from { opacity: 0; transform: translateY(18px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+          }
+
+          /* Scale-in entrance animation */
+          .scale-in {
+            animation: scale-in 400ms cubic-bezier(0.18, 0.8, 0.2, 1) both;
+          }
+
+          @keyframes scale-in {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+          }
+
+          /* Consistent focus ring for all interactive elements */
+          input:focus-visible,
+          select:focus-visible,
+          textarea:focus-visible,
+          button:focus-visible {
+            outline: 2px solid rgba(10, 163, 235, 0.45);
+            outline-offset: 2px;
+            border-color: transparent;
+          }
+
+          /* Unified input field style */
+          .input-field {
+            width: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.60);
+            padding: 0.625rem 1rem;
+            color: #111827;
+            border-radius: 0.75rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+          }
+
+          html.dark .input-field {
+            border-color: rgba(255, 255, 255, 0.08);
+            background: rgba(60, 60, 60, 0.45);
+            color: #f3f4f6;
+          }
+
+          .input-field:focus {
+            border-color: rgba(10, 163, 235, 0.50);
+            box-shadow: 0 0 0 3px rgba(10, 163, 235, 0.08);
+          }
+
+          html.dark .input-field:focus {
+            border-color: rgba(10, 163, 235, 0.50);
+            box-shadow: 0 0 0 3px rgba(10, 163, 235, 0.12);
+          }
+
+          /* Responsive adjustment for small screens */
+          @media (max-width: 640px) {
+            body::before {
+              background:
+                radial-gradient(circle at 20% 15%, rgba(34, 155, 198, 0.10), transparent 24rem),
+                radial-gradient(circle at 80% 10%, rgba(8, 173, 114, 0.08), transparent 26rem),
+                linear-gradient(180deg, #f8fafc 0%, #f5f5f7 50%, #eef6f4 100%);
+            }
+            html.dark body::before {
+              background:
+                radial-gradient(circle at 20% 15%, rgba(34, 155, 198, 0.12), transparent 24rem),
+                radial-gradient(circle at 80% 10%, rgba(8, 173, 114, 0.08), transparent 26rem),
+                linear-gradient(180deg, #0f131a 0%, #141a1e 50%, #0d1a17 100%);
+            }
           }
 
           @media (prefers-reduced-motion: reduce) {

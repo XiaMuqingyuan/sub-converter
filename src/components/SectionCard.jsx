@@ -12,12 +12,12 @@ export const SectionCard = (props) => {
   } = props;
 
   return (
-    <div class={`rounded-2xl border border-black/10 bg-white/65 p-6 shadow-sm dark:border-white/10 dark:bg-white/[0.04] md:p-8 ${className}`}>
+    <div class={`glass-card rounded-2xl p-6 md:p-8 ${className}`}>
       {(icon || title || actions) && (
-        <div class="mb-4 flex items-center justify-between">
+        <div class="mb-5 flex items-center justify-between">
           {(icon || title) && (
-            <h3 class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
-              {icon && <i class={`${icon} text-gray-400`} />}
+            <h3 class="flex items-center gap-2.5 text-lg font-semibold text-gray-900 dark:text-white">
+              {icon && <i class={`${icon} text-primary-500/60 dark:text-primary-400/60`} />}
               {title}
             </h3>
           )}

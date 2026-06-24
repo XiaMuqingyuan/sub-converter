@@ -4,9 +4,9 @@
 import { TextareaWithActions } from './TextareaWithActions.jsx';
 
 const DEFAULT_ACTION_CLASS =
-  'px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded transition-colors flex items-center gap-1';
+  'px-2.5 py-1.5 text-xs font-medium bg-gray-100 dark:bg-[#3b3b3b] text-gray-600 dark:text-gray-300 rounded-lg transition-colors flex items-center gap-1';
 const DEFAULT_VALIDATE_CLASS =
-  'px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors flex items-center gap-1';
+  'px-3 py-1.5 bg-gray-200 dark:bg-[#3b3b3b] text-gray-700 dark:text-gray-300 rounded-lg text-xs font-medium hover:bg-gray-300 dark:hover:bg-white/10 transition-colors flex items-center gap-1';
 
 const createAction = (action = {}, defaults = {}) => {
   const final = {
