@@ -1,85 +1,80 @@
-export const formLogicFn = (t) => {
+export const formLogicFn = () => {
+    // Inline: parse Surge INI into JSON-like object
+    const parseSurgeValue = (rawValue = '') => {
+        const trimmed = rawValue.trim();
+        if (trimmed === '') return '';
+        const unquoted = trimmed.replace(/^"(.*)"$/, '$1');
+        const lower = unquoted.toLowerCase();
+        if (lower === 'true') return true;
+        if (lower === 'false') return false;
+        if (/^-?\d+(\.\d+)?$/.test(unquoted)) return Number(unquoted);
+        return unquoted;
+    };
+
+    const convertSurgeIniToJson = (content) => {
+        const lines = content.split(/\r?\n/);
+        const config = {};
+        let currentSection = null;
+        const obj = (key) => { if (!config[key]) config[key] = {}; return config[key]; };
+        const arr = (key) => { if (!config[key]) config[key] = []; return config[key]; };
+        for (const rawLine of lines) {
+            const line = rawLine.trim();
+            if (!line || line.startsWith(';') || line.startsWith('#')) continue;
+            const m = line.match(/^\[(.+)]$/);
+            if (m) { currentSection = m[1].trim(); continue; }
+            if (!currentSection) continue;
+            const sec = currentSection.toLowerCase();
+            if (sec === 'general' || sec === 'replica') {
+                const eq = line.indexOf('=');
+                if (eq === -1) continue;
+                const k = line.slice(0, eq).trim();
+                const v = line.slice(eq + 1).trim();
+                if (!k) continue;
+                obj(sec)[k] = parseSurgeValue(v);
+            } else if (sec === 'proxy') {
+                arr('proxies').push(line);
+            } else if (sec === 'proxy group') {
+                arr('proxy-groups').push(line);
+            } else if (sec === 'rule') {
+                arr('rules').push(line);
+            } else {
+                arr(sec).push(line);
+            }
+        }
+        if (!config.general && !config.replica && !config.proxies && !config['proxy-groups']) {
+            throw new Error('Unable to parse Surge INI content');
+        }
+        return config;
+    };
+
+    const parseSurgeConfigInput = (content) => {
+        const trimmed = content.trim();
+        if (!trimmed) throw new Error('Config content is empty');
+        try {
+            return { configObject: JSON.parse(trimmed), convertedFromIni: false };
+        } catch {
+            return { configObject: convertSurgeIniToJson(content), convertedFromIni: true };
+        }
+    };
+
+    const loadTranslations = (obj) => {
+        const T = window.APP_TRANSLATIONS;
+        if (!T) return;
+        obj.processingText = T.processing;
+        obj.convertText = T.convert;
+        obj.shortenLinksText = T.shortenLinks;
+        obj.shorteningText = T.shortening;
+        obj.showFullLinksText = T.showFullLinks;
+        obj.saveConfigText = T.saveConfig;
+        obj.savingConfigText = T.savingConfig;
+        obj.configContentRequiredText = T.configContentRequired;
+        obj.configSaveFailedText = T.configSaveFailed;
+    };
+
     window.formData = function () {
-        // Inline parseSurgeConfigInput to make it available in toString()
-        const parseSurgeValue = (rawValue = '') => {
-            const trimmed = rawValue.trim();
-            if (trimmed === '') return '';
-            const unquoted = trimmed.replace(/^"(.*)"$/, '$1');
-            const lower = unquoted.toLowerCase();
-            if (lower === 'true') return true;
-            if (lower === 'false') return false;
-            if (/^-?\d+(\.\d+)?$/.test(unquoted)) return Number(unquoted);
-            return unquoted;
-        };
-
-        const convertSurgeIniToJson = (content) => {
-            const lines = content.split(/\r?\n/);
-            const config = {};
-            let currentSection = null;
-            const ensureObject = (key) => {
-                if (!config[key]) config[key] = {};
-                return config[key];
-            };
-            const ensureArray = (key) => {
-                if (!config[key]) config[key] = [];
-                return config[key];
-            };
-            for (const rawLine of lines) {
-                const line = rawLine.trim();
-                if (!line || line.startsWith(';') || line.startsWith('#')) continue;
-                const sectionMatch = line.match(/^\[(.+)]$/);
-                if (sectionMatch) {
-                    currentSection = sectionMatch[1].trim();
-                    continue;
-                }
-                if (!currentSection) continue;
-                const sectionName = currentSection.toLowerCase();
-                if (sectionName === 'general' || sectionName === 'replica') {
-                    const equalsIndex = line.indexOf('=');
-                    if (equalsIndex === -1) continue;
-                    const key = line.slice(0, equalsIndex).trim();
-                    const value = line.slice(equalsIndex + 1).trim();
-                    if (!key) continue;
-                    const target = ensureObject(sectionName);
-                    target[key] = parseSurgeValue(value);
-                } else if (sectionName === 'proxy') {
-                    ensureArray('proxies').push(line);
-                } else if (sectionName === 'proxy group') {
-                    ensureArray('proxy-groups').push(line);
-                } else if (sectionName === 'rule') {
-                    ensureArray('rules').push(line);
-                } else {
-                    ensureArray(sectionName).push(line);
-                }
-            }
-            if (!config.general && !config.replica && !config.proxies && !config['proxy-groups']) {
-                throw new Error('Unable to parse Surge INI content');
-            }
-            return config;
-        };
-
-        const parseSurgeConfigInput = (content) => {
-            const trimmed = content.trim();
-            if (!trimmed) throw new Error('Config content is empty');
-            try {
-                return { configObject: JSON.parse(trimmed), convertedFromIni: false };
-            } catch {
-                const converted = convertSurgeIniToJson(content);
-                return { configObject: converted, convertedFromIni: true };
-            }
-        };
-
         return {
             input: '',
             showAdvanced: false,
-            // Accordion states for each section (二级手风琴状态)
-            accordionSections: {
-                rules: true,        // 规则选择 - 默认展开
-                customRules: false, // 自定义规则
-                general: false,     // 通用设置
-                baseConfig: false,  // 基础配置
-                ua: false          // User Agent
-            },
             selectedRules: [],
             selectedPredefinedRule: 'balanced',
             subconverterCopied: false,
@@ -106,7 +101,6 @@ export const formLogicFn = (t) => {
             customShortCode: '',
             parsingUrl: false,
             parseDebounceTimer: null,
-            // These will be populated from window.APP_TRANSLATIONS
             processingText: '',
             convertText: '',
             shortenLinksText: '',
@@ -114,20 +108,9 @@ export const formLogicFn = (t) => {
             showFullLinksText: '',
 
             init() {
-                // Load translations
-                if (window.APP_TRANSLATIONS) {
-                    this.processingText = window.APP_TRANSLATIONS.processing;
-                    this.convertText = window.APP_TRANSLATIONS.convert;
-                    this.shortenLinksText = window.APP_TRANSLATIONS.shortenLinks;
-                    this.shorteningText = window.APP_TRANSLATIONS.shortening;
-                    this.showFullLinksText = window.APP_TRANSLATIONS.showFullLinks;
-                    this.saveConfigText = window.APP_TRANSLATIONS.saveConfig;
-                    this.savingConfigText = window.APP_TRANSLATIONS.savingConfig;
-                    this.configContentRequiredText = window.APP_TRANSLATIONS.configContentRequired;
-                    this.configSaveFailedText = window.APP_TRANSLATIONS.configSaveFailed;
-                }
+                loadTranslations(this);
 
-                // Load saved data
+                // Restore persisted state
                 this.input = localStorage.getItem('inputTextarea') || '';
                 this.showAdvanced = localStorage.getItem('advancedToggle') === 'true';
                 this.groupByCountry = localStorage.getItem('groupByCountry') === 'true';
@@ -139,104 +122,61 @@ export const formLogicFn = (t) => {
                 this.configEditor = localStorage.getItem('configEditor') || '';
                 this.configType = localStorage.getItem('configType') || 'singbox';
                 this.customShortCode = localStorage.getItem('customShortCode') || '';
-                const initialUrlParams = new URLSearchParams(window.location.search);
-                this.currentConfigId = initialUrlParams.get('configId') || '';
+                this.currentConfigId = new URLSearchParams(window.location.search).get('configId') || '';
 
-                // Load accordion states
-                const savedAccordion = localStorage.getItem('accordionSections');
-                if (savedAccordion) {
-                    try {
-                        this.accordionSections = JSON.parse(savedAccordion);
-                    } catch (e) {
-                        // If parsing fails, keep defaults
-                    }
-                }
-
-                // Initialize rules
                 this.applyPredefinedRule();
 
-                // Watchers to save state
-                this.$watch('input', val => {
-                    localStorage.setItem('inputTextarea', val);
-                    this.handleInputChange(val);
-                });
-                this.$watch('showAdvanced', val => localStorage.setItem('advancedToggle', val));
-                this.$watch('groupByCountry', val => localStorage.setItem('groupByCountry', val));
-                this.$watch('includeAutoSelect', val => localStorage.setItem('includeAutoSelect', val));
-                this.$watch('enableClashUI', val => localStorage.setItem('enableClashUI', val));
-                this.$watch('externalController', val => localStorage.setItem('externalController', val));
-                this.$watch('externalUiDownloadUrl', val => localStorage.setItem('externalUiDownloadUrl', val));
-                this.$watch('customUA', val => localStorage.setItem('userAgent', val));
-                this.$watch('configEditor', val => {
-                    localStorage.setItem('configEditor', val);
-                    this.resetConfigValidation();
-                });
-                this.$watch('configType', val => {
-                    localStorage.setItem('configType', val);
-                    this.resetConfigValidation();
-                });
-                this.$watch('customShortCode', val => localStorage.setItem('customShortCode', val));
-                this.$watch('accordionSections', val => localStorage.setItem('accordionSections', JSON.stringify(val)), { deep: true });
-            },
-
-            toggleAccordion(section) {
-                this.accordionSections[section] = !this.accordionSections[section];
+                // Watchers for persistence
+                this.$watch('input', v => { localStorage.setItem('inputTextarea', v); this.handleInputChange(v); });
+                this.$watch('showAdvanced', v => localStorage.setItem('advancedToggle', v));
+                this.$watch('groupByCountry', v => localStorage.setItem('groupByCountry', v));
+                this.$watch('includeAutoSelect', v => localStorage.setItem('includeAutoSelect', v));
+                this.$watch('enableClashUI', v => localStorage.setItem('enableClashUI', v));
+                this.$watch('externalController', v => localStorage.setItem('externalController', v));
+                this.$watch('externalUiDownloadUrl', v => localStorage.setItem('externalUiDownloadUrl', v));
+                this.$watch('customUA', v => localStorage.setItem('userAgent', v));
+                this.$watch('configEditor', v => { localStorage.setItem('configEditor', v); this.resetConfigValidation(); });
+                this.$watch('configType', v => { localStorage.setItem('configType', v); this.resetConfigValidation(); });
+                this.$watch('customShortCode', v => localStorage.setItem('customShortCode', v));
             },
 
             applyPredefinedRule() {
                 if (this.selectedPredefinedRule === 'custom') return;
-
-                // PREDEFINED_RULE_SETS will be injected globally
-                const rules = window.PREDEFINED_RULE_SETS;
-                if (rules && rules[this.selectedPredefinedRule]) {
-                    this.selectedRules = rules[this.selectedPredefinedRule];
+                const sets = window.PREDEFINED_RULE_SETS;
+                if (sets?.[this.selectedPredefinedRule]) {
+                    this.selectedRules = sets[this.selectedPredefinedRule];
                 }
             },
 
             getSubconverterUrl() {
                 const origin = window.location.origin;
                 const params = new URLSearchParams();
-
-                // Use preset name directly if a predefined rule set is selected
                 if (this.selectedPredefinedRule && this.selectedPredefinedRule !== 'custom') {
                     params.append('selectedRules', this.selectedPredefinedRule);
                 } else if (this.selectedPredefinedRule === 'custom') {
                     params.append('selectedRules', JSON.stringify(this.selectedRules));
                 }
-
-                // Include customRules when available (best-effort; may make URL long)
                 try {
-                    const customRulesInput = document.querySelector('input[name="customRules"]');
-                    const customRules = customRulesInput && customRulesInput.value ? JSON.parse(customRulesInput.value) : [];
-                    if (Array.isArray(customRules) && customRules.length > 0) {
-                        params.append('customRules', JSON.stringify(customRules));
+                    const el = document.querySelector('input[name="customRules"]');
+                    if (el?.value) {
+                        const parsed = JSON.parse(el.value);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            params.append('customRules', JSON.stringify(parsed));
+                        }
                     }
-                } catch { }
-
-                if (!this.includeAutoSelect) {
-                    params.append('include_auto_select', 'false');
-                }
-
-                if (this.groupByCountry) {
-                    params.append('group_by_country', 'true');
-                }
-
-                // Include lang parameter so subconverter gets correct group names
+                } catch { /* ignore */ }
+                if (!this.includeAutoSelect) params.append('include_auto_select', 'false');
+                if (this.groupByCountry) params.append('group_by_country', 'true');
                 const appLang = window.APP_LANG || 'zh-CN';
-                if (appLang !== 'zh-CN') {
-                    params.append('lang', appLang);
-                }
-
-                const queryString = params.toString();
-                return origin + '/subconverter' + (queryString ? '?' + queryString : '');
+                if (appLang !== 'zh-CN') params.append('lang', appLang);
+                return `${origin}/subconverter?${params.toString()}`;
             },
 
             copySubconverterUrl() {
-                const url = this.getSubconverterUrl();
-                navigator.clipboard.writeText(url).then(() => {
+                navigator.clipboard.writeText(this.getSubconverterUrl()).then(() => {
                     this.subconverterCopied = true;
                     setTimeout(() => this.subconverterCopied = false, 2000);
-                }).catch(() => {});
+                }).catch(() => { });
             },
 
             resetConfigValidation() {
@@ -250,48 +190,32 @@ export const formLogicFn = (t) => {
                     alert(this.configContentRequiredText || window.APP_TRANSLATIONS.configContentRequired);
                     return;
                 }
-
                 let payloadContent = this.configEditor;
                 if (this.configType === 'surge') {
                     try {
-                        const { configObject } = parseSurgeConfigInput(this.configEditor);
-                        payloadContent = JSON.stringify(configObject);
-                    } catch (parseError) {
+                        payloadContent = JSON.stringify(parseSurgeConfigInput(this.configEditor).configObject);
+                    } catch (e) {
                         const prefix = window.APP_TRANSLATIONS.configValidationError || 'Config validation error:';
-                        alert(`${prefix} ${parseError?.message || ''}`.trim());
+                        alert(`${prefix} ${e?.message || ''}`.trim());
                         return;
                     }
                 }
-
                 this.savingConfig = true;
                 try {
-                    const response = await fetch('/config', {
+                    const res = await fetch('/config', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            type: this.configType,
-                            content: payloadContent
-                        })
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ type: this.configType, content: payloadContent })
                     });
-                    const responseText = await response.text();
-                    if (!response.ok) {
-                        throw new Error(responseText || response.statusText || 'Request failed');
-                    }
-                    const configId = responseText.trim();
-                    if (!configId) {
-                        throw new Error('Missing config ID');
-                    }
-                    this.currentConfigId = configId;
-                    this.updateConfigIdInUrl(configId);
-
-                    const successMessage = window.APP_TRANSLATIONS.saveConfigSuccess || 'Configuration saved successfully!';
-                    alert(`${successMessage}\nID: ${configId}`);
+                    const text = await res.text();
+                    if (!res.ok) throw new Error(text || res.statusText || 'Request failed');
+                    if (!text.trim()) throw new Error('Missing config ID');
+                    this.currentConfigId = text.trim();
+                    this.updateConfigIdInUrl(this.currentConfigId);
+                    alert(`${window.APP_TRANSLATIONS.saveConfigSuccess || 'Configuration saved successfully!'}\nID: ${this.currentConfigId}`);
                 } catch (error) {
                     console.error('Failed to save base config:', error);
-                    const errorPrefix = this.configSaveFailedText || window.APP_TRANSLATIONS.configSaveFailed || 'Failed to save configuration';
-                    alert(`${errorPrefix}: ${error?.message || 'Unknown error'}`);
+                    alert(`${this.configSaveFailedText || window.APP_TRANSLATIONS.configSaveFailed || 'Failed to save configuration'}: ${error?.message || 'Unknown error'}`);
                 } finally {
                     this.savingConfig = false;
                 }
@@ -304,27 +228,19 @@ export const formLogicFn = (t) => {
                     this.configValidationMessage = this.configContentRequiredText || window.APP_TRANSLATIONS.configContentRequired;
                     return;
                 }
-
                 try {
                     if (this.configType === 'clash') {
-                        if (!window.jsyaml || !window.jsyaml.load) {
-                            throw new Error(window.APP_TRANSLATIONS.parserUnavailable || 'Parser unavailable. Please refresh and try again.');
-                        }
+                        if (!window.jsyaml?.load) throw new Error(window.APP_TRANSLATIONS.parserUnavailable || 'Parser unavailable');
                         window.jsyaml.load(content);
-                        this.configValidationState = 'success';
-                        this.configValidationMessage =
-                            window.APP_TRANSLATIONS.validYamlConfig || 'YAML config is valid';
+                        this.configValidationMessage = window.APP_TRANSLATIONS.validYamlConfig || 'YAML config is valid';
                     } else if (this.configType === 'surge') {
                         parseSurgeConfigInput(this.configEditor);
-                        this.configValidationState = 'success';
-                        this.configValidationMessage =
-                            window.APP_TRANSLATIONS.validJsonConfig || 'JSON config is valid';
+                        this.configValidationMessage = window.APP_TRANSLATIONS.validJsonConfig || 'JSON config is valid';
                     } else {
                         JSON.parse(content);
-                        this.configValidationState = 'success';
-                        this.configValidationMessage =
-                            window.APP_TRANSLATIONS.validJsonConfig || 'JSON config is valid';
+                        this.configValidationMessage = window.APP_TRANSLATIONS.validJsonConfig || 'JSON config is valid';
                     }
+                    this.configValidationState = 'success';
                 } catch (error) {
                     this.configValidationState = 'error';
                     const prefix = window.APP_TRANSLATIONS.configValidationError || 'Config validation error: ';
@@ -342,72 +258,50 @@ export const formLogicFn = (t) => {
             },
 
             clearAll() {
-                if (confirm(window.APP_TRANSLATIONS.confirmClearAll)) {
-                    this.input = '';
-                    this.generatedLinks = null;
-                    this.shortenedLinks = null;
-                    this.customShortCode = '';
-                    // Also clear from localStorage
-                    localStorage.removeItem('customShortCode');
-                }
+                if (!confirm(window.APP_TRANSLATIONS.confirmClearAll)) return;
+                this.input = '';
+                this.generatedLinks = null;
+                this.shortenedLinks = null;
+                this.customShortCode = '';
+                localStorage.removeItem('customShortCode');
             },
 
             updateConfigIdInUrl(configId) {
                 const url = new URL(window.location.href);
-                if (configId) {
-                    url.searchParams.set('configId', configId);
-                } else {
-                    url.searchParams.delete('configId');
-                }
+                if (configId) url.searchParams.set('configId', configId);
+                else url.searchParams.delete('configId');
                 window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
             },
 
             async submitForm() {
                 this.loading = true;
-                this.shortenedLinks = null; // Reset shortened links when generating new links
+                this.shortenedLinks = null;
                 try {
-                    // Get custom rules from the child component via the hidden input
-                    const customRulesInput = document.querySelector('input[name="customRules"]');
-                    const customRules = customRulesInput && customRulesInput.value ? JSON.parse(customRulesInput.value) : [];
-
-                    // Construct URLs
+                    const el = document.querySelector('input[name="customRules"]');
+                    const customRules = (el?.value) ? JSON.parse(el.value) : [];
                     const origin = window.location.origin;
                     const params = new URLSearchParams();
                     params.append('config', this.input);
                     params.append('ua', this.customUA);
                     params.append('selectedRules', JSON.stringify(this.selectedRules));
                     params.append('customRules', JSON.stringify(customRules));
-
                     if (this.groupByCountry) params.append('group_by_country', 'true');
                     if (!this.includeAutoSelect) params.append('include_auto_select', 'false');
                     if (this.enableClashUI) params.append('enable_clash_ui', 'true');
                     if (this.externalController) params.append('external_controller', this.externalController);
                     if (this.externalUiDownloadUrl) params.append('external_ui_download_url', this.externalUiDownloadUrl);
-
-                    // Add configId if present in URL
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const configId = this.currentConfigId || urlParams.get('configId');
-                    if (configId) {
-                        params.append('configId', configId);
-                    }
-
-                    const queryString = params.toString();
-
+                    const configId = this.currentConfigId || new URLSearchParams(window.location.search).get('configId');
+                    if (configId) params.append('configId', configId);
+                    const qs = params.toString();
                     this.generatedLinks = {
-                        xray: origin + '/xray?' + queryString,
-                        singbox: origin + '/singbox?' + queryString,
-                        clash: origin + '/clash?' + queryString,
-                        surge: origin + '/surge?' + queryString
+                        xray: `${origin}/xray?${qs}`,
+                        singbox: `${origin}/singbox?${qs}`,
+                        clash: `${origin}/clash?${qs}`,
+                        surge: `${origin}/surge?${qs}`
                     };
-
-                    // Scroll to results
                     setTimeout(() => {
-                        const resultsDiv = document.querySelector('.mt-12');
-                        if (resultsDiv) {
-                            resultsDiv.scrollIntoView({ behavior: 'smooth' });
-                        }
+                        document.querySelector('.mt-12')?.scrollIntoView({ behavior: 'smooth' });
                     }, 100);
-
                 } catch (error) {
                     console.error('Error generating links:', error);
                     alert(window.APP_TRANSLATIONS.errorGeneratingLinks);
@@ -417,64 +311,25 @@ export const formLogicFn = (t) => {
             },
 
             async shortenLinks() {
-                // Check if links are already shortened
-                if (this.shortenedLinks) {
-                    alert(window.APP_TRANSLATIONS.alreadyShortened);
-                    return;
-                }
-
-                if (!this.generatedLinks) {
-                    return;
-                }
-
+                if (this.shortenedLinks) { alert(window.APP_TRANSLATIONS.alreadyShortened); return; }
+                if (!this.generatedLinks) return;
                 this.shortening = true;
                 try {
                     const origin = window.location.origin;
                     const shortened = {};
-
-                    // Use custom short code if provided, otherwise let backend generate it once
                     let shortCode = this.customShortCode.trim();
-                    let isFirstRequest = true;
-
-                    // Shorten each link type
+                    let isFirst = true;
+                    const prefixMap = { xray: 'x', singbox: 'b', clash: 'c', surge: 's' };
                     for (const [type, url] of Object.entries(this.generatedLinks)) {
-                        try {
-                            let apiUrl = `${origin}/shorten-v2?url=${encodeURIComponent(url)}`;
-
-                            // For the first request, either use custom code or let backend generate
-                            // For subsequent requests, use the code from first request
-                            if (shortCode) {
-                                apiUrl += `&shortCode=${encodeURIComponent(shortCode)}`;
-                            }
-
-                            const response = await fetch(apiUrl);
-                            if (!response.ok) {
-                                throw new Error(`Failed to shorten ${type} link`);
-                            }
-                            const returnedCode = await response.text();
-
-                            // If this is the first request and no custom code was provided,
-                            // use the backend-generated code for all subsequent requests
-                            if (isFirstRequest && !shortCode) {
-                                shortCode = returnedCode;
-                            }
-                            isFirstRequest = false;
-
-                            // Map types to their corresponding path prefixes
-                            const prefixMap = {
-                                xray: 'x',
-                                singbox: 'b',
-                                clash: 'c',
-                                surge: 's'
-                            };
-
-                            shortened[type] = `${origin}/${prefixMap[type]}/${returnedCode}`;
-                        } catch (error) {
-                            console.error(`Error shortening ${type} link:`, error);
-                            throw error;
-                        }
+                        let apiUrl = `${origin}/shorten-v2?url=${encodeURIComponent(url)}`;
+                        if (shortCode) apiUrl += `&shortCode=${encodeURIComponent(shortCode)}`;
+                        const res = await fetch(apiUrl);
+                        if (!res.ok) throw new Error(`Failed to shorten ${type} link`);
+                        const code = await res.text();
+                        if (isFirst && !shortCode) shortCode = code;
+                        isFirst = false;
+                        shortened[type] = `${origin}/${prefixMap[type]}/${code}`;
                     }
-
                     this.shortenedLinks = shortened;
                 } catch (error) {
                     console.error('Error shortening links:', error);
@@ -484,94 +339,36 @@ export const formLogicFn = (t) => {
                 }
             },
 
-            // Handle input change with debounce
             handleInputChange(val) {
-                // Clear previous timer
-                if (this.parseDebounceTimer) {
-                    clearTimeout(this.parseDebounceTimer);
-                }
-
-                // If input is empty, don't try to parse
-                if (!val || !val.trim()) {
-                    return;
-                }
-
-                // Debounce for 500ms
-                this.parseDebounceTimer = setTimeout(() => {
-                    this.tryParseSubscriptionUrl(val.trim());
-                }, 500);
+                if (this.parseDebounceTimer) clearTimeout(this.parseDebounceTimer);
+                if (!val?.trim()) return;
+                this.parseDebounceTimer = setTimeout(() => this.tryParseSubscriptionUrl(val.trim()), 500);
             },
 
-            // Check if input looks like a subscription URL
             isSubscriptionUrl(text) {
-                // Check if it's a single line URL (not multiple lines)
-                if (text.includes('\n')) {
-                    return false;
-                }
-
+                if (text.includes('\n')) return false;
                 try {
                     const url = new URL(text);
-                    // Check if it matches our short link pattern: /[bcxs]/[code]
-                    const pathMatch = url.pathname.match(/^\/([bcxs])\/([a-zA-Z0-9_-]+)$/);
-                    if (pathMatch) {
-                        return true;
-                    }
-
-                    // Check if it's a full subscription URL with query params
-                    const fullMatch = url.pathname.match(/^\/(singbox|clash|xray|surge)$/);
-                    if (fullMatch && url.search) {
-                        return true;
-                    }
-
-                    return false;
-                } catch {
-                    return false;
-                }
+                    if (url.pathname.match(/^\/([bcxs])\/([a-zA-Z0-9_-]+)$/)) return true;
+                    if (url.pathname.match(/^\/(singbox|clash|xray|surge)$/) && url.search) return true;
+                } catch { /* not a URL */ }
+                return false;
             },
 
-            // Try to parse subscription URL
             async tryParseSubscriptionUrl(text) {
-                if (!this.isSubscriptionUrl(text)) {
-                    return;
-                }
-
+                if (!this.isSubscriptionUrl(text)) return;
                 this.parsingUrl = true;
                 try {
-                    let urlToParse;
-
-                    try {
-                        urlToParse = new URL(text);
-                    } catch {
-                        return;
-                    }
-
-                    // Check if it's a short link
-                    const shortMatch = urlToParse.pathname.match(/^\/([bcxs])\/([a-zA-Z0-9_-]+)$/);
-
+                    let url = new URL(text);
+                    const shortMatch = url.pathname.match(/^\/([bcxs])\/([a-zA-Z0-9_-]+)$/);
                     if (shortMatch) {
-                        // It's a short link, resolve it first
-                        const response = await fetch(`/resolve?url=${encodeURIComponent(text)}`);
-                        if (!response.ok) {
-                            console.warn('Failed to resolve short URL');
-                            return;
-                        }
-
-                        const data = await response.json();
-                        if (!data.originalUrl) {
-                            console.warn('No original URL returned');
-                            return;
-                        }
-
-                        urlToParse = new URL(data.originalUrl);
+                        const res = await fetch(`/resolve?url=${encodeURIComponent(text)}`);
+                        if (!res.ok) { console.warn('Failed to resolve short URL'); return; }
+                        const data = await res.json();
+                        if (!data.originalUrl) { console.warn('No original URL returned'); return; }
+                        url = new URL(data.originalUrl);
                     }
-
-                    // Now parse the full URL and populate form
-                    this.populateFormFromUrl(urlToParse);
-
-                    // Show a success message
-                    const message = window.APP_TRANSLATIONS?.urlParsedSuccess || '已成功解析订阅链接配置';
-                    console.log(message);
-
+                    this.populateFormFromUrl(url);
                 } catch (error) {
                     console.error('Error parsing subscription URL:', error);
                 } finally {
@@ -579,78 +376,42 @@ export const formLogicFn = (t) => {
                 }
             },
 
-            // Populate form fields from parsed URL
             populateFormFromUrl(url) {
-                const params = new URLSearchParams(url.search);
-
-                // Extract config (the original subscription URLs)
-                const config = params.get('config');
-                if (config) {
-                    this.input = config;
-                }
-
-                // Extract selectedRules
-                const selectedRules = params.get('selectedRules');
+                const p = new URLSearchParams(url.search);
+                const config = p.get('config');
+                if (config) this.input = config;
+                const selectedRules = p.get('selectedRules');
                 if (selectedRules) {
                     try {
                         const parsed = JSON.parse(selectedRules);
-                        if (Array.isArray(parsed)) {
-                            this.selectedRules = parsed;
-                            this.selectedPredefinedRule = 'custom';
-                        }
-                    } catch (e) {
-                        console.warn('Failed to parse selectedRules:', e);
-                    }
+                        if (Array.isArray(parsed)) { this.selectedRules = parsed; this.selectedPredefinedRule = 'custom'; }
+                    } catch { /* ignore */ }
                 }
-
-                // Extract customRules
-                const customRules = params.get('customRules');
+                const customRules = p.get('customRules');
                 if (customRules) {
                     try {
                         const parsed = JSON.parse(customRules);
                         if (Array.isArray(parsed) && parsed.length > 0) {
-                            // Dispatch custom event for CustomRules component to listen
-                            window.dispatchEvent(new CustomEvent('restore-custom-rules', {
-                                detail: { rules: parsed }
-                            }));
+                            window.dispatchEvent(new CustomEvent('restore-custom-rules', { detail: { rules: parsed } }));
                         }
-                    } catch (e) {
-                        console.warn('Failed to parse customRules:', e);
-                    }
+                    } catch { /* ignore */ }
                 }
-
-                // Extract other parameters
-                this.groupByCountry = params.get('group_by_country') === 'true';
-                this.includeAutoSelect = params.get('include_auto_select') !== 'false';
-                this.enableClashUI = params.get('enable_clash_ui') === 'true';
-
-                const externalController = params.get('external_controller');
-                if (externalController) {
-                    this.externalController = externalController;
-                }
-
-                const externalUiDownloadUrl = params.get('external_ui_download_url');
-                if (externalUiDownloadUrl) {
-                    this.externalUiDownloadUrl = externalUiDownloadUrl;
-                }
-
-                const ua = params.get('ua');
-                if (ua) {
-                    this.customUA = ua;
-                }
-
-                const configId = params.get('configId');
-                if (configId) {
-                    this.currentConfigId = configId;
-                    this.updateConfigIdInUrl(configId);
-                }
-
-                // Expand advanced options if any advanced settings are present
+                this.groupByCountry = p.get('group_by_country') === 'true';
+                this.includeAutoSelect = p.get('include_auto_select') !== 'false';
+                this.enableClashUI = p.get('enable_clash_ui') === 'true';
+                const ec = p.get('external_controller');
+                if (ec) this.externalController = ec;
+                const eu = p.get('external_ui_download_url');
+                if (eu) this.externalUiDownloadUrl = eu;
+                const ua = p.get('ua');
+                if (ua) this.customUA = ua;
+                const cid = p.get('configId');
+                if (cid) { this.currentConfigId = cid; this.updateConfigIdInUrl(cid); }
                 if (selectedRules || customRules || this.groupByCountry || this.enableClashUI ||
-                    externalController || externalUiDownloadUrl || ua || configId) {
+                    ec || eu || ua || cid) {
                     this.showAdvanced = true;
                 }
             }
-        }
-    }
+        };
+    };
 };

@@ -24,10 +24,10 @@ export const Layout = (props) => {
           document.addEventListener('alpine:init', () => { window.__alpineLoaded = true; });
           window.addEventListener('DOMContentLoaded', () => {
             if (window.__alpineFailed || !window.__alpineLoaded) {
-              console.error('Failed to initialize Alpine.js. Interactive features are disabled.');
+              console.error('Alpine.js initialization failed. Interactive features are disabled.');
               const warning = document.createElement('div');
-              warning.className = 'fixed bottom-4 right-4 bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-lg shadow';
-              warning.textContent = '加载 Alpine.js 失败，页面交互功能不可用，请刷新或检查网络。';
+              warning.className = 'fixed bottom-4 right-4 z-50 bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-lg shadow-lg text-sm';
+              warning.textContent = 'Alpine.js 加载失败，页面交互功能不可用，请刷新或检查网络。';
               document.body.appendChild(warning);
             }
           });
@@ -40,7 +40,6 @@ export const Layout = (props) => {
                 boxShadow: {
                   soft: '0 20px 60px -32px rgba(15, 23, 42, 0.22)',
                   glow: '0 28px 90px -42px rgba(10, 163, 235, 0.55)',
-                  glass: '0 24px 70px -42px rgba(15, 23, 42, 0.32)'
                 },
                 colors: {
                   primary: {
@@ -48,7 +47,7 @@ export const Layout = (props) => {
                     100: '#dcf2ff',
                     200: '#b2e6ff',
                     300: '#6ed4ff',
-                    400: '#33c5ff', // Spaceship Blue
+                    400: '#33c5ff',
                     500: '#0aa3eb',
                     600: '#0082ca',
                     700: '#0068a3',
@@ -59,7 +58,7 @@ export const Layout = (props) => {
                   gray: {
                     850: '#1f2937',
                     900: '#111827',
-                    950: '#0b0f19', // Deep dark for background
+                    950: '#0b0f19',
                   }
                 },
                 fontFamily: {
@@ -70,9 +69,7 @@ export const Layout = (props) => {
           }
         </script>
         <style>
-          html {
-            scroll-behavior: smooth;
-          }
+          html { scroll-behavior: smooth; }
 
           body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -81,6 +78,7 @@ export const Layout = (props) => {
             overflow-x: hidden;
           }
 
+          /* Ambient gradient background */
           body::before {
             content: '';
             position: fixed;
@@ -101,6 +99,7 @@ export const Layout = (props) => {
               linear-gradient(180deg, #121826 0%, #171717 52%, #0f1f1c 100%);
           }
 
+          /* Subtle grid overlay */
           body::after {
             content: '';
             position: fixed;
@@ -134,32 +133,6 @@ export const Layout = (props) => {
             background: rgba(48, 48, 48, 0.78);
           }
 
-          .premium-card {
-            transform: translateZ(0);
-            transition: border-color 180ms ease, background 180ms ease;
-          }
-
-          .premium-card:hover {
-            border-color: rgba(255, 255, 255, 0.18);
-          }
-
-          .dark .premium-card:hover,
-          html.dark .premium-card:hover {
-            border-color: rgba(51, 197, 255, 0.26);
-          }
-
-          .hero-orb {
-            position: absolute;
-            width: 18rem;
-            height: 18rem;
-            border-radius: 9999px;
-            background: linear-gradient(135deg, rgba(51, 197, 255, 0.24), rgba(255, 255, 255, 0.08));
-            filter: blur(14px);
-            opacity: 0.72;
-            pointer-events: none;
-            animation: float-orb 12s ease-in-out infinite alternate;
-          }
-
           .interactive-soft {
             transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms ease, background 220ms ease, color 220ms ease, border-color 220ms ease;
           }
@@ -170,11 +143,6 @@ export const Layout = (props) => {
 
           .fade-up {
             animation: fade-up 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-          }
-
-          @keyframes float-orb {
-            from { transform: translate3d(0, 0, 0) scale(1); }
-            to { transform: translate3d(18px, 24px, 0) scale(1.06); }
           }
 
           @keyframes fade-up {
@@ -194,30 +162,25 @@ export const Layout = (props) => {
           [x-cloak] { display: none !important; }
         </style>
         <script>
+          // Dark mode controller
           function appData() {
             return {
               darkMode: localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches),
               toggleDarkMode() {
                 this.darkMode = !this.darkMode;
                 localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
-                if (this.darkMode) {
-                  document.documentElement.classList.add('dark');
-                } else {
-                  document.documentElement.classList.remove('dark');
-                }
+                document.documentElement.classList.toggle('dark', this.darkMode);
               },
               init() {
-                if (this.darkMode) {
-                  document.documentElement.classList.add('dark');
-                }
+                if (this.darkMode) document.documentElement.classList.add('dark');
               }
             }
           }
 
-          // Version update checker Alpine.js component
+          // Version update checker
           function updateChecker(currentVersion, apiUrl) {
             return {
-              currentVersion: currentVersion,
+              currentVersion,
               latestVersion: '',
               showUpdateToast: false,
               i18n: {
@@ -228,56 +191,50 @@ export const Layout = (props) => {
                 later: getUpdateI18n('later')
               },
               init() {
-                // Check for updates after a short delay to not block initial render
                 setTimeout(() => this.checkForUpdates(), 3000);
               },
               async checkForUpdates() {
                 try {
-                  // Check if user dismissed this version before
                   const dismissedVersion = localStorage.getItem('sublink_dismissed_version');
                   const lastCheck = localStorage.getItem('sublink_last_version_check');
                   const now = Date.now();
-                  
-                  // Only check once per hour to avoid rate limiting
+
+                  // Rate limit: once per hour
                   if (lastCheck && (now - parseInt(lastCheck)) < 3600000) {
-                    const cachedVersion = localStorage.getItem('sublink_latest_version');
-                    if (cachedVersion && cachedVersion !== dismissedVersion && this.compareVersions(cachedVersion, this.currentVersion) > 0) {
-                      this.latestVersion = cachedVersion;
+                    const cached = localStorage.getItem('sublink_latest_version');
+                    if (cached && cached !== dismissedVersion && this.compareVersions(cached, this.currentVersion) > 0) {
+                      this.latestVersion = cached;
                       this.showUpdateToast = true;
                     }
                     return;
                   }
 
-                  const response = await fetch(apiUrl, {
+                  const res = await fetch(apiUrl, {
                     headers: { 'Accept': 'application/vnd.github.v3+json' }
                   });
-                  
-                  if (!response.ok) return;
-                  
-                  const data = await response.json();
-                  const latestVersion = (data.tag_name || '').replace(/^v/, '');
-                  
-                  // Cache the result
-                  localStorage.setItem('sublink_latest_version', latestVersion);
+                  if (!res.ok) return;
+
+                  const data = await res.json();
+                  const latest = (data.tag_name || '').replace(/^v/, '');
+
+                  localStorage.setItem('sublink_latest_version', latest);
                   localStorage.setItem('sublink_last_version_check', now.toString());
-                  
-                  // Compare versions
-                  if (latestVersion && latestVersion !== dismissedVersion && this.compareVersions(latestVersion, this.currentVersion) > 0) {
-                    this.latestVersion = latestVersion;
+
+                  if (latest && latest !== dismissedVersion && this.compareVersions(latest, this.currentVersion) > 0) {
+                    this.latestVersion = latest;
                     this.showUpdateToast = true;
                   }
-                } catch (error) {
-                  console.debug('Version check failed:', error.message);
+                } catch (e) {
+                  console.debug('Version check failed:', e.message);
                 }
               },
               compareVersions(v1, v2) {
-                const parts1 = v1.split('.').map(Number);
-                const parts2 = v2.split('.').map(Number);
-                for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
-                  const p1 = parts1[i] || 0;
-                  const p2 = parts2[i] || 0;
-                  if (p1 > p2) return 1;
-                  if (p1 < p2) return -1;
+                const p1 = v1.split('.').map(Number);
+                const p2 = v2.split('.').map(Number);
+                for (let i = 0; i < Math.max(p1.length, p2.length); i++) {
+                  const a = p1[i] || 0, b = p2[i] || 0;
+                  if (a > b) return 1;
+                  if (a < b) return -1;
                 }
                 return 0;
               },
